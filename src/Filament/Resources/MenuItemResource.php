@@ -6,17 +6,16 @@ use BackedEnum;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemTarget;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
-use Filament\Forms\Components\Fieldset;
+use Filament\Actions;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Route;
-use Filament\Actions;
-use Filament\Schemas\Schema;
 
 class MenuItemResource extends Resource
 {
