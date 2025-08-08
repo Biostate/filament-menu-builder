@@ -4,12 +4,12 @@ namespace Biostate\FilamentMenuBuilder\Filament\Resources;
 
 use BackedEnum;
 use Biostate\FilamentMenuBuilder\Models\Menu;
+use Filament\Actions;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Actions;
-use Filament\Schemas\Schema;
 
 class MenuResource extends Resource
 {
