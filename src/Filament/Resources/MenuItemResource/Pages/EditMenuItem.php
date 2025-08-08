@@ -3,7 +3,7 @@
 namespace Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages;
 
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditMenuItem extends EditRecord

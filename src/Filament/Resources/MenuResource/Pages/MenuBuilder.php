@@ -13,8 +13,6 @@ class MenuBuilder extends Page
 
     protected static string $resource = MenuResource::class;
 
-    protected static string $view = 'filament-menu-builder::filament.pages.menu-builder';
-
     public function getTitle(): string | Htmlable
     {
         return __('filament-menu-builder::menu-builder.configure_menu');
@@ -48,5 +46,17 @@ class MenuBuilder extends Page
         ];
 
         return $breadcrumbs;
+    }
+
+    public function getViewData(): array
+    {
+        return [
+            'record' => $this->record,
+        ];
+    }
+
+    public function getView(): string
+    {
+        return 'filament-menu-builder::filament.pages.menu-builder';
     }
 }

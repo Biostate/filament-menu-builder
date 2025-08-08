@@ -7,11 +7,11 @@ use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
-use Filament\Support\Enums\ActionSize;
+use Filament\Schemas\Components\Grid;
+use Filament\Support\Enums\Size;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
@@ -38,7 +38,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
         // TODO: extend action and make new delete action for this component
         return Action::make('delete')
             ->tooltip(__('filament-menu-builder::menu-builder.delete_menu_item_tooltip'))
-            ->size(ActionSize::ExtraSmall)
+            ->size(Size::ExtraSmall)
             ->icon('heroicon-m-trash')
             ->iconButton()
             ->requiresConfirmation()
@@ -66,8 +66,8 @@ class MenuBuilder extends Component implements HasActions, HasForms
         // TODO: extend action and make new edit action for this component
         return Action::make('edit')
             ->tooltip(__('filament-menu-builder::menu-builder.edit_menu_item_tooltip'))
-            ->size(ActionSize::ExtraSmall)
-            ->icon('heroicon-m-pencil')
+            ->size(Size::ExtraSmall)
+            ->icon('heroicon-m-pencil-square')
             ->iconButton()
             ->fillForm(function (array $arguments) {
                 $menuItemId = $arguments['menuItemId'];
@@ -96,7 +96,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
         // TODO: extend action and make new edit action for this component
         return Action::make('createSubItem')
             ->tooltip(__('filament-menu-builder::menu-builder.create_sub_item_tooltip'))
-            ->size(ActionSize::ExtraSmall)
+            ->size(Size::ExtraSmall)
             ->icon('heroicon-m-plus')
             ->iconButton()
             ->form(fn () => [
@@ -139,7 +139,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
         // TODO: extend action and make new edit action for this component
         return Action::make('duplicate')
             ->tooltip(__('filament-menu-builder::menu-builder.duplicate_menu_item_tooltip'))
-            ->size(ActionSize::ExtraSmall)
+            ->size(Size::ExtraSmall)
             ->icon('heroicon-m-document-duplicate')
             ->iconButton()
             ->requiresConfirmation()
@@ -167,7 +167,6 @@ class MenuBuilder extends Component implements HasActions, HasForms
                 $action->makeModalSubmitAction('duplicateAndEdit', arguments: ['edit' => true])
                     ->label('Duplicate & Edit'),
             ]);
-
     }
 
     public function render()

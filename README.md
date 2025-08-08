@@ -65,6 +65,20 @@ Optionally, you can publish the views using
 php artisan vendor:publish --tag="filament-menu-builder-views"
 ```
 
+This package is requires custom theme that Filament provides.
+
+1. **Create a custom theme** following the [Filament documentation](https://filamentphp.com/docs/4.x/styling/overview#creating-a-custom-theme).
+
+2. **Add the package's views to your theme** by including this in your generated `theme.css`:
+
+```css
+@source '../../../../vendor/biostate/filament-menu-builder/resources/views/**/*';
+```
+3. Run this command in your project root:
+```bash
+npm run build
+```
+
 ## Caching
 
 Menu items are cached in view component by default. If you want to disable caching, you can set the `cache` configuration to `false`.
@@ -141,6 +155,7 @@ Also you can give a custom view to the component. This package supports Bootstra
 - [ ] add tailwind blade component
 - [ ] add "Do you want to discard the changes?" if you have unsaved changes
 - [ ] add more actions like: move up, move down, move one level up, move one level down, etc.
+- [ ] add duplicate with children action
 
 ## Testing
 

@@ -4,16 +4,15 @@ namespace Biostate\FilamentMenuBuilder\Http\Livewire;
 
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
-use Filament\Forms;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Contracts\HasSchemas;
+use Filament\Schemas\Schema;
 use Livewire\Component;
 
-class MenuItemForm extends Component implements HasForms
+class MenuItemForm extends Component implements HasSchemas
 {
-    use InteractsWithForms;
+    use InteractsWithSchemas;
 
     public int $menuId;
 
@@ -22,24 +21,22 @@ class MenuItemForm extends Component implements HasForms
     public function mount(int $menuId): void
     {
         $this->menuId = $menuId;
-
         $this->form->fill();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Menu Item')
+        return $schema
+            ->components([
+                Section::make('Menu Item')
                     ->description('Create New Menu Item')
-                    ->schema(MenuItemResource::getFormSchema())
+                    ->schema(MenuItemResource::getFormSchemaArray())
                     ->footerActions([
-                        Action::make('submit')
+                        \Filament\Actions\Action::make('submit')
                             ->label(__('filament-menu-builder::menu-builder.create_menu_item'))
                             ->submit('submit'),
                     ]),
             ])
-            ->operation('create')
             ->statePath('data');
     }
 
@@ -54,11 +51,6 @@ class MenuItemForm extends Component implements HasForms
         $this->form->fill();
 
         $this->dispatch('menu-item-created', menuId: $this->menuId, menuItemId: $menuItem->id);
-    }
-
-    protected function getFormStatePath(): string
-    {
-        return 'data';
     }
 
     public function render()

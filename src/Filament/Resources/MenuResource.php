@@ -2,18 +2,20 @@
 
 namespace Biostate\FilamentMenuBuilder\Filament\Resources;
 
+use BackedEnum;
 use Biostate\FilamentMenuBuilder\Models\Menu;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Actions;
+use Filament\Schemas\Schema;
 
 class MenuResource extends Resource
 {
     protected static ?string $model = Menu::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-bars-3';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bars-3';
 
     public static function getNavigationGroup(): ?string
     {
@@ -30,9 +32,9 @@ class MenuResource extends Resource
         return __('filament-menu-builder::menu-builder.menus');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 TextInput::make('name')
                     ->label(__('filament-menu-builder::menu-builder.form_labels.name'))
@@ -43,7 +45,7 @@ class MenuResource extends Resource
                 TextInput::make('slug')
                     ->label(__('filament-menu-builder::menu-builder.form_labels.slug'))
                     ->required()
-                    ->unique(ignoreRecord: true)
+                    ->unique(table: 'menus', column: 'slug', ignoreRecord: true)
                     ->placeholder(__('filament-menu-builder::menu-builder.form_placeholders.slug'))
                     ->hidden(fn ($context) => $context === 'create')
                     ->maxLength(255),
@@ -69,15 +71,15 @@ class MenuResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\Action::make(__('filament-menu-builder::menu-builder.configure_menu'))
+            ->recordActions([
+                Actions\Action::make(__('filament-menu-builder::menu-builder.configure_menu'))
                     ->url(fn (Menu $record): string => static::getUrl('build', ['record' => $record]))
                     ->icon('heroicon-o-bars-3'),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                Actions\DeleteBulkAction::make(),
             ]);
     }
 

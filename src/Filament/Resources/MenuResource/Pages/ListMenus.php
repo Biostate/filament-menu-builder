@@ -3,7 +3,7 @@
 namespace Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages;
 
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListMenus extends ListRecords

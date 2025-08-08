@@ -6,12 +6,9 @@ use Biostate\FilamentMenuBuilder\Commands\FilamentMenuBuilderCommand;
 use Biostate\FilamentMenuBuilder\Http\Livewire\MenuBuilder;
 use Biostate\FilamentMenuBuilder\Http\Livewire\MenuItemForm;
 use Biostate\FilamentMenuBuilder\Testing\TestsFilamentMenuBuilder;
-use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
-use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
-use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Blade;
 use Livewire\Features\SupportTesting\Testable;
@@ -80,14 +77,6 @@ class FilamentMenuBuilderServiceProvider extends PackageServiceProvider
             $this->getAssetPackageName()
         );
 
-        FilamentAsset::registerScriptData(
-            $this->getScriptData(),
-            $this->getAssetPackageName()
-        );
-
-        // Icon Registration
-        FilamentIcon::register($this->getIcons());
-
         // Handle Stubs
         if (app()->runningInConsole()) {
             foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
@@ -112,8 +101,6 @@ class FilamentMenuBuilderServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('filament-menu-builder', __DIR__ . '/../resources/dist/components/filament-menu-builder.js'),
-            Css::make('filament-menu-builder', __DIR__ . '/../resources/dist/filament-menu-builder.css'),
             Js::make('filament-menu-builder-scripts', __DIR__ . '/../resources/dist/filament-menu-builder.js'),
         ];
     }
@@ -131,25 +118,9 @@ class FilamentMenuBuilderServiceProvider extends PackageServiceProvider
     /**
      * @return array<string>
      */
-    protected function getIcons(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return array<string>
-     */
     protected function getRoutes(): array
     {
         // TODO: if api enabled
-        return [];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    protected function getScriptData(): array
-    {
         return [];
     }
 

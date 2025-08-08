@@ -2,6 +2,7 @@
 
 namespace Biostate\FilamentMenuBuilder\Filament\Resources;
 
+use BackedEnum;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemTarget;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
@@ -10,17 +11,18 @@ use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Route;
+use Filament\Actions;
+use Filament\Schemas\Schema;
 
 class MenuItemResource extends Resource
 {
     protected static ?string $model = MenuItem::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-bars-3';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bars-3';
 
     public static function getNavigationGroup(): ?string
     {
@@ -37,9 +39,9 @@ class MenuItemResource extends Resource
         return __('filament-menu-builder::menu-builder.menu_items');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema(static::getFormSchema());
     }
 
@@ -59,12 +61,12 @@ class MenuItemResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                Actions\DeleteBulkAction::make(),
             ]);
     }
 
@@ -75,7 +77,7 @@ class MenuItemResource extends Resource
         ];
     }
 
-    public static function getFormSchema()
+    public static function getFormSchema(): array
     {
         return [
             TextInput::make('name')
@@ -93,7 +95,7 @@ class MenuItemResource extends Resource
             TextInput::make('wrapper_class')
                 ->label(__('filament-menu-builder::menu-builder.form_labels.wrapper_class'))
                 ->maxLength(255),
-            Fieldset::make('URL')
+            \Filament\Schemas\Components\Fieldset::make('URL')
                 ->columns(1)
                 ->schema([
                     Select::make('type')
@@ -106,13 +108,13 @@ class MenuItemResource extends Resource
                         })
                         ->default('link')
                         ->required()
-                        ->reactive(),
+                        ->live(),
                     // URL
                     TextInput::make('url')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.url'))
-                        ->hidden(fn ($get) => $get('type') != 'link')
+                        ->hidden(fn ($get) => $get('type')->value != 'link')
                         ->maxLength(255)
-                        ->required(fn ($get) => $get('type') == 'link'),
+                        ->required(fn ($get) => $get('type')->value == 'link'),
                     // ROUTE
                     Select::make('route')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.route'))
@@ -148,8 +150,8 @@ class MenuItemResource extends Resource
                                 return $routes;
                             }
                         )
-                        ->hidden(fn ($get) => $get('type') != 'route')
-                        ->required(fn ($get) => $get('type') == 'route')
+                        ->hidden(fn ($get) => $get('type')->value != 'route')
+                        ->required(fn ($get) => $get('type')->value == 'route')
                         ->afterStateUpdated(function (callable $set, callable $get, $state) {
                             if ($state === null) {
                                 return [];
@@ -170,10 +172,10 @@ class MenuItemResource extends Resource
 
                             $set('route_parameters', array_fill_keys($parameters, null));
                         })
-                        ->reactive(),
+                        ->live(),
                     KeyValue::make('route_parameters')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.route_parameters'))
-                        ->hidden(fn ($get) => $get('type') != 'route')
+                        ->hidden(fn ($get) => $get('type')->value != 'route')
                         ->helperText(function ($get, $set, $operation) {
                             if ($get('route') === null) {
                                 return __('filament-menu-builder::menu-builder.route_parameters_empty_helper_text');
@@ -202,10 +204,10 @@ class MenuItemResource extends Resource
                         ->options(
                             array_flip(config('filament-menu-builder.models', []))
                         )
-                        ->reactive()
-                        ->required(fn ($get) => $get('type') == 'model')
+                        ->live()
+                        ->required(fn ($get) => $get('type')->value == 'model')
                         ->afterStateUpdated(fn (callable $set) => $set('menuable_id', null))
-                        ->hidden(fn ($get) => empty(config('filament-menu-builder.models', [])) || $get('type') != 'model'),
+                        ->hidden(fn ($get) => empty(config('filament-menu-builder.models', [])) || $get('type')->value != 'model'),
                     Select::make('menuable_id')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.menuable_id'))
                         ->searchable()
@@ -229,6 +231,11 @@ class MenuItemResource extends Resource
                     'parameters' => implode(', ', config('filament-menu-builder.usable_parameters', [])),
                 ])),
         ];
+    }
+
+    public static function getFormSchemaArray(): array
+    {
+        return static::getFormSchema();
     }
 
     public static function getPages(): array
