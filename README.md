@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/biostate/filament-menu-builder/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/biostate/filament-menu-builder/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/biostate/filament-menu-builder.svg?style=flat-square)](https://packagist.org/packages/biostate/filament-menu-builder)
 
-> **Note:** I developed this package as a hobby project, but wanted to share it with whoever may need it. I will keep updating this package. If you have any suggestions, feel free to create an issue.
+> **Note:** If you have any suggestions, feel free to create an issue.
 
 This package offers a powerful menu builder for the Filament admin panel, enabling efficient menu creation and management.
 
