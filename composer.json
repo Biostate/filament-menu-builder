@@ -24,8 +24,10 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^4.0",
-        "kalnoy/nestedset": "^6.0",
+        "filament/forms": "^4.0",
+        "filament/tables": "^4.0",
         "spatie/laravel-package-tools": "^1.15.0",
+        "kalnoy/nestedset": "^6.0",
         "spatie/laravel-sluggable": "^3.6"
     },
     "require-dev": {

@@ -4,14 +4,13 @@
     "scripts": {
         "dev:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-menu-builder.css --postcss --watch",
         "dev:scripts": "node bin/build.js --dev",
-        "build:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-menu-builder.css --postcss --minify && npm run purge",
+        "build:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-menu-builder.css --postcss --minify",
         "build:scripts": "node bin/build.js",
-        "purge": "filament-purge -i resources/dist/filament-menu-builder.css -o resources/dist/filament-menu-builder.css -v 3.x",
+        "purge": "filament-purge -i resources/dist/filament-menu-builder.css -o resources/dist/filament-menu-builder.css -v",
         "dev": "npm-run-all --parallel dev:*",
         "build": "npm-run-all build:*"
     },
     "devDependencies": {
-        "@awcodes/filament-plugin-purge": "^1.1.1",
         "@tailwindcss/forms": "^0.5.4",
         "@tailwindcss/typography": "^0.5.9",
         "autoprefixer": "^10.4.14",
