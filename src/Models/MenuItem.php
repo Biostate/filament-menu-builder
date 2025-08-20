@@ -91,11 +91,38 @@ class MenuItem extends Model
 
     public function getLinkAttribute($value): string
     {
-        return match ($this->type) {
-            MenuItemType::Model => $this->menuable?->menu_link ?? '#',
-            MenuItemType::Link => $this->resolveUrl(),
-            default => route($this->route, $this->route_parameters->toArray()),
-        };
+        if ($this->type === 'link') {
+            return $this->url ?: '#';
+        }
+
+        if ($this->type === 'route' && $this->route) {
+            try {
+                $parameters = is_array($this->route_parameters) ? $this->route_parameters : [];
+                $route = app('router')->getRoutes()->getByName($this->route);
+                if ($route) {
+                    $uri = $route->uri();
+                    preg_match_all('/\{(\w+?)\}/', $uri, $matches);
+                    $requiredParameters = $matches[1];
+                    foreach ($requiredParameters as $param) {
+                        if (!isset($parameters[$param]) || is_null($parameters[$param]) || trim($parameters[$param]) === '') {
+                            
+                            return '#';
+                        }
+                    }
+                    return route($this->route, $parameters);
+                }
+                return '#';
+            } catch (\Illuminate\Routing\Exceptions\UrlGenerationException $e) {
+                
+                return '#';
+            }
+        }
+
+        if ($this->type === 'model' && $this->menuable) {
+            return $this->menuable->getLink() ?: '#';
+        }
+
+        return '#';
     }
 
     public function resolveUrl(): string
