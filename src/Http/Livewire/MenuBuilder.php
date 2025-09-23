@@ -59,8 +59,8 @@ class MenuBuilder extends Component implements HasActions, HasForms
                 if (! $menuItem) {
                     return;
                 }
-                MenuItem::descendantsOf($menuItem)->each(function (MenuItem $menuItem) {
-                    $menuItem->delete();
+                MenuItem::descendantsOf($menuItem->id)->each(function (MenuItem $descendant) {
+                    $descendant->delete();
                 });
 
                 $menuItem->delete();
@@ -89,7 +89,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
                 $menuItemId = $arguments['menuItemId'];
 
                 $menuItem = MenuItem::find($menuItemId);
-        
+
                 $temp = $data['route_parameters'];
                 $data['route_parameters'] = [];
 
@@ -193,11 +193,15 @@ class MenuBuilder extends Component implements HasActions, HasForms
 
     public function items(): Collection
     {
-        return MenuItem::where('menu_id', $this->menuId)
-            ->with('menuable')
-            ->defaultOrder()
-            ->get()
-            ->toTree();
+        /** @var \Kalnoy\Nestedset\QueryBuilder $query */
+        $query = MenuItem::query()
+            ->where('menu_id', $this->menuId)
+            ->with('menuable');
+            
+        /** @var \Kalnoy\Nestedset\Collection $items */
+        $items = $query->defaultOrder()->get();
+        
+        return $items->toTree();
     }
 
     public function save(): void

@@ -36,6 +36,10 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property-read array $missing_route_parameters
  *
  * @method static void rebuildTree(array $data, bool $delete = false, mixed $root = null)
+ * @method static \Illuminate\Database\Eloquent\Collection descendantsOf(mixed $id, array $columns = ['*'], bool $andSelf = false)
+ * @method \Illuminate\Database\Eloquent\Collection toTree()
+ * @method $this afterNode(self $node)
+ * @method \Illuminate\Database\Eloquent\Builder defaultOrder(string $dir = 'asc')
  */
 class MenuItem extends Model
 {
@@ -152,6 +156,8 @@ class MenuItem extends Model
             return [];
         } catch (\Illuminate\Routing\Exceptions\UrlGenerationException $e) {
             return $this->extractMissingParameters();
+        } catch (\Exception $e) {
+            return [];
         }
     }
 
