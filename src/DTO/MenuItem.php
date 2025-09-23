@@ -21,8 +21,8 @@ class MenuItem
         public ?string $menuable_type,
         public ?string $url,
         public bool $use_menuable_name,
-        public Collection $parameters,
-        public Collection $children,
+        public ?Collection $parameters,
+        public ?Collection $children,
     ) {
         //
     }
