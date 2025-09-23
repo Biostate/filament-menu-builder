@@ -9,6 +9,10 @@ use Filament\Panel;
 
 class FilamentMenuBuilderPlugin implements Plugin
 {
+    protected string $menuResource = MenuResource::class;
+
+    protected string $menuItemResource = MenuItemResource::class;
+
     public function getId(): string
     {
         return 'filament-menu-builder';
@@ -17,8 +21,8 @@ class FilamentMenuBuilderPlugin implements Plugin
     public function register(Panel $panel): void
     {
         $panel->resources([
-            MenuResource::class,
-            MenuItemResource::class,
+            $this->menuResource,
+            $this->menuItemResource,
         ]);
     }
 
@@ -30,6 +34,18 @@ class FilamentMenuBuilderPlugin implements Plugin
     public static function make(): static
     {
         return app(static::class);
+    }
+
+    public function usingMenuResource(string $menuResource): static
+    {
+        $this->menuResource = $menuResource;
+        return $this;
+    }
+    
+    public function usingMenuItemResource(string $menuItemResource): static
+    {
+        $this->menuItemResource = $menuItemResource;
+        return $this;
     }
 
     public static function get(): static

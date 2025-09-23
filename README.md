@@ -19,6 +19,7 @@ Built for simplicity and performance, this package ensures a seamless solution f
 
 Table of Contents:
 - [Installation](#installation)
+- [Custom Resources](#custom-resources)
 - [Caching](#caching)
 - [Menuable Trait](#menuable-trait)
 - [Routes](#routes)
@@ -77,6 +78,78 @@ This package is requires custom theme that Filament provides.
 3. Run this command in your project root:
 ```bash
 npm run build
+```
+
+## Custom Resources
+
+You can extend the default Menu and MenuItem resources to customize their behavior. This is useful when you want to modify labels, add custom fields, or implement additional functionality.
+
+### Using Custom Resources
+
+In your `AdminPanelProvider.php` file, you can specify custom resource classes:
+
+```php
+use App\CustomClasses\MenuResource;
+use App\CustomClasses\MenuItemResource;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ... other configurations
+        ->plugins([
+            \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::make()
+                ->usingMenuResource(MenuResource::class)
+                ->usingMenuItemResource(MenuItemResource::class),
+        ]);
+}
+```
+
+### Creating Custom Resource Classes
+
+Here's an example of how to extend the MenuItem resource:
+
+```php
+<?php
+
+namespace App\CustomClasses;
+
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource as BaseMenuItemResource;
+
+class MenuItemResource extends BaseMenuItemResource
+{
+    public static function getModelLabel(): string
+    {
+        return 'Custom ' . parent::getModelLabel();
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Custom ' . parent::getPluralModelLabel();
+    }
+}
+```
+
+You can also extend the Menu resource in a similar way:
+
+```php
+<?php
+
+namespace App\CustomClasses;
+
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource as BaseMenuResource;
+
+class MenuResource extends BaseMenuResource
+{
+    public static function getModelLabel(): string
+    {
+        return 'Custom ' . parent::getModelLabel();
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Custom ' . parent::getPluralModelLabel();
+    }
+}
 ```
 
 ## Caching
