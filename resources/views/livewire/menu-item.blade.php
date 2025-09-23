@@ -11,6 +11,11 @@
                 <x-filament::badge size="xs" class="ml-2 px-2" color="gray">
                     {{ $item->normalized_type }}
                 </x-filament::badge>
+                @if(! $item->is_link_resolved)
+                <x-filament::badge size="xs" class="ml-2 px-2" color="danger">
+                    {{ $item->link_error ?? 'Link cannot be resolved!' }}
+                </x-filament::badge>
+                @endif
             </div>
         </div>
         <div class="flex gap-2 items-center [&_svg]:shrink-0">
@@ -20,7 +25,7 @@
             {{($this->deleteAction)(['menuItemId' => $item->id])}}
             <x-filament-actions::group class="hidden" :actions="[
                 ($this->viewAction)(['menuItemId' => $item->id]),
-                ($this->goToLinkAction)([])->url($item->link),
+                ($this->goToLinkAction)([])->url($item->is_link_resolved ? $item->link : '#'),
             ]" />
         </div>
     </div>

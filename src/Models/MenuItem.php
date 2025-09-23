@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Kalnoy\Nestedset\NodeTrait;
@@ -28,7 +29,12 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property-read string $normalized_type
  * @property-read string $link
  * @property-read \Illuminate\Database\Eloquent\Model|null $menuable
- * 
+ * @property-read bool $is_route_resolved
+ * @property-read bool $is_url_resolved
+ * @property-read bool $is_link_resolved
+ * @property-read string|null $link_error
+ * @property-read array $missing_route_parameters
+ *
  * @method static void rebuildTree(array $data, bool $delete = false, mixed $root = null)
  */
 class MenuItem extends Model
@@ -97,8 +103,126 @@ class MenuItem extends Model
         return match ($this->type) {
             MenuItemType::Model => $this->menuable?->menu_link ?? '#',
             MenuItemType::Link => $this->resolveUrl(),
-            default => route($this->route, $this->route_parameters->toArray()),
+            default => $this->resolveRoute(),
         };
+    }
+
+    public function getIsRouteResolvedAttribute(): bool
+    {
+        try {
+            $this->resolveRoute();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function getIsUrlResolvedAttribute(): bool
+    {
+        try {
+            $this->resolveUrl();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function getIsLinkResolvedAttribute(): bool
+    {
+        return match ($this->type) {
+            MenuItemType::Model => $this->menuable && method_exists($this->menuable, 'getMenuLinkAttribute'),
+            MenuItemType::Link => $this->is_url_resolved,
+            default => $this->is_route_resolved,
+        };
+    }
+
+    public function getLinkErrorAttribute(): ?string
+    {
+        return match ($this->type) {
+            MenuItemType::Model => $this->getModelLinkError(),
+            MenuItemType::Link => $this->getUrlError(),
+            default => $this->getRouteError(),
+        };
+    }
+
+    public function getMissingRouteParametersAttribute(): array
+    {
+        try {
+            $this->resolveRoute();
+            return [];
+        } catch (\Illuminate\Routing\Exceptions\UrlGenerationException $e) {
+            return $this->extractMissingParameters();
+        }
+    }
+
+    private function getModelLinkError(): ?string
+    {
+        if (!$this->menuable) {
+            return 'Model not found';
+        }
+
+        if (!method_exists($this->menuable, 'getMenuLinkAttribute')) {
+            return 'Model does not implement menu_link attribute';
+        }
+
+        // Use reflection to safely access the menu_link attribute
+        try {
+            $reflection = new \ReflectionClass($this->menuable);
+            if ($reflection->hasMethod('getMenuLinkAttribute')) {
+                $method = $reflection->getMethod('getMenuLinkAttribute');
+                $link = $method->invoke($this->menuable);
+                return $link ? null : 'Model menu_link is empty';
+            }
+        } catch (\Exception $e) {
+            return 'Model menu_link error: ' . $e->getMessage();
+        }
+
+        return 'Unable to access model menu_link';
+    }
+
+    private function getUrlError(): ?string
+    {
+        try {
+            $this->resolveUrl();
+            return null;
+        } catch (\Exception $e) {
+            return 'Invalid URL: ' . $e->getMessage();
+        }
+    }
+
+    private function getRouteError(): ?string
+    {
+        try {
+            $this->resolveRoute();
+            return null;
+        } catch (\Illuminate\Routing\Exceptions\UrlGenerationException $e) {
+            $missingParams = $this->extractMissingParameters();
+            if (!empty($missingParams)) {
+                return 'Missing route parameters: ' . implode(', ', $missingParams);
+            }
+            return 'Route not found: ' . $this->route;
+        } catch (\Exception $e) {
+            return 'Route error: ' . $e->getMessage();
+        }
+    }
+
+    private function extractMissingParameters(): array
+    {
+        /* @var $route Route */
+        $route = app('router')->getRoutes()->getByName($this->route);
+        if (! $route) {
+            return [];
+        }
+
+        $parameterNames = $route->parameterNames();
+        $filteredRouteParameters = $this->route_parameters->filter(fn ($item) => $item['value'] !== null && $item['value'] !== '')->pluck('key')->toArray();
+
+        return array_diff($parameterNames, $filteredRouteParameters);
+    }
+
+    public function resolveRoute(): string
+    {
+        return route($this->route, $this->route_parameters->pluck('value', 'key')->toArray());
     }
 
     public function resolveUrl(): string
