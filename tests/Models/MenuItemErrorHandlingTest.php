@@ -14,7 +14,7 @@ class MenuItemErrorHandlingTest extends TestCase
     public function test_route_error_handling(): void
     {
         $menu = \Biostate\FilamentMenuBuilder\Models\Menu::factory()->create();
-        
+
         $menuItem = MenuItem::factory()->create([
             'menu_id' => $menu->id,
             'type' => MenuItemType::Route,
@@ -30,7 +30,7 @@ class MenuItemErrorHandlingTest extends TestCase
     public function test_missing_route_parameters_error_handling(): void
     {
         $menu = \Biostate\FilamentMenuBuilder\Models\Menu::factory()->create();
-        
+
         $menuItem = MenuItem::factory()->create([
             'menu_id' => $menu->id,
             'type' => MenuItemType::Route,
@@ -47,7 +47,7 @@ class MenuItemErrorHandlingTest extends TestCase
     public function test_url_error_handling(): void
     {
         $menu = \Biostate\FilamentMenuBuilder\Models\Menu::factory()->create();
-        
+
         // Test with a URL that might cause issues
         $menuItem = MenuItem::factory()->create([
             'menu_id' => $menu->id,
@@ -64,7 +64,7 @@ class MenuItemErrorHandlingTest extends TestCase
     public function test_model_error_handling(): void
     {
         $menu = \Biostate\FilamentMenuBuilder\Models\Menu::factory()->create();
-        
+
         // Use a valid model class but with non-existent ID
         $menuItem = MenuItem::factory()->create([
             'menu_id' => $menu->id,
@@ -81,12 +81,12 @@ class MenuItemErrorHandlingTest extends TestCase
     public function test_model_without_menu_link_error_handling(): void
     {
         $menu = \Biostate\FilamentMenuBuilder\Models\Menu::factory()->create();
-        
+
         // Create a test model manually
-        $testModel = new \Biostate\FilamentMenuBuilder\Tests\Models\TestModel();
+        $testModel = new \Biostate\FilamentMenuBuilder\Tests\Models\TestModel;
         $testModel->name = 'Test Model';
         $testModel->save();
-        
+
         $menuItem = MenuItem::factory()->create([
             'menu_id' => $menu->id,
             'type' => MenuItemType::Model,
@@ -102,7 +102,7 @@ class MenuItemErrorHandlingTest extends TestCase
     public function test_successful_link_resolution(): void
     {
         $menu = \Biostate\FilamentMenuBuilder\Models\Menu::factory()->create();
-        
+
         $menuItem = MenuItem::factory()->create([
             'menu_id' => $menu->id,
             'type' => MenuItemType::Link,

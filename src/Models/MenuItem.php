@@ -115,6 +115,7 @@ class MenuItem extends Model
     {
         try {
             $this->resolveRoute();
+
             return true;
         } catch (\Exception $e) {
             return false;
@@ -125,6 +126,7 @@ class MenuItem extends Model
     {
         try {
             $this->resolveUrl();
+
             return true;
         } catch (\Exception $e) {
             return false;
@@ -153,6 +155,7 @@ class MenuItem extends Model
     {
         try {
             $this->resolveRoute();
+
             return [];
         } catch (\Illuminate\Routing\Exceptions\UrlGenerationException $e) {
             return $this->extractMissingParameters();
@@ -163,11 +166,11 @@ class MenuItem extends Model
 
     private function getModelLinkError(): ?string
     {
-        if (!$this->menuable) {
+        if (! $this->menuable) {
             return 'Model not found';
         }
 
-        if (!method_exists($this->menuable, 'getMenuLinkAttribute')) {
+        if (! method_exists($this->menuable, 'getMenuLinkAttribute')) {
             return 'Model does not implement menu_link attribute';
         }
 
@@ -177,6 +180,7 @@ class MenuItem extends Model
             if ($reflection->hasMethod('getMenuLinkAttribute')) {
                 $method = $reflection->getMethod('getMenuLinkAttribute');
                 $link = $method->invoke($this->menuable);
+
                 return $link ? null : 'Model menu_link is empty';
             }
         } catch (\Exception $e) {
@@ -190,6 +194,7 @@ class MenuItem extends Model
     {
         try {
             $this->resolveUrl();
+
             return null;
         } catch (\Exception $e) {
             return 'Invalid URL: ' . $e->getMessage();
@@ -200,12 +205,14 @@ class MenuItem extends Model
     {
         try {
             $this->resolveRoute();
+
             return null;
         } catch (\Illuminate\Routing\Exceptions\UrlGenerationException $e) {
             $missingParams = $this->extractMissingParameters();
-            if (!empty($missingParams)) {
+            if (! empty($missingParams)) {
                 return 'Missing route parameters: ' . implode(', ', $missingParams);
             }
+
             return 'Route not found: ' . $this->route;
         } catch (\Exception $e) {
             return 'Route error: ' . $e->getMessage();

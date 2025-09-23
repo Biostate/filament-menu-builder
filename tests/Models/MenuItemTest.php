@@ -15,9 +15,9 @@ class MenuItemTest extends TestCase
 
     public function test_fillable_attributes(): void
     {
-        $menuItem = new MenuItem();
+        $menuItem = new MenuItem;
         $fillable = $menuItem->getFillable();
-        
+
         $expectedFillable = [
             'id',
             'name',
@@ -34,7 +34,7 @@ class MenuItemTest extends TestCase
             'url',
             'use_menuable_name',
         ];
-        
+
         foreach ($expectedFillable as $field) {
             $this->assertContains($field, $fillable);
         }
@@ -42,9 +42,9 @@ class MenuItemTest extends TestCase
 
     public function test_casts_configuration(): void
     {
-        $menuItem = new MenuItem();
+        $menuItem = new MenuItem;
         $casts = $menuItem->getCasts();
-        
+
         $this->assertEquals('collection', $casts['parameters']);
         $this->assertEquals('collection', $casts['route_parameters']);
         $this->assertEquals(MenuItemType::class, $casts['type']);
@@ -54,7 +54,7 @@ class MenuItemTest extends TestCase
     {
         $menu = Menu::factory()->create();
         $menuItem = MenuItem::factory()->create(['menu_id' => $menu->id]);
-        
+
         $this->assertInstanceOf(Menu::class, $menuItem->menu);
         $this->assertEquals($menu->id, $menuItem->menu->id);
     }
@@ -65,14 +65,14 @@ class MenuItemTest extends TestCase
             'menuable_type' => 'Biostate\\FilamentMenuBuilder\\Tests\\Models\\TestModel',
             'menuable_id' => 1,
         ]);
-        
+
         $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\MorphTo::class, $menuItem->menuable());
     }
 
     public function test_get_menu_name_attribute_without_menuable(): void
     {
         $menuItem = MenuItem::factory()->create(['name' => 'Test Item']);
-        
+
         $this->assertEquals('Test Item', $menuItem->menu_name);
     }
 
@@ -85,7 +85,7 @@ class MenuItemTest extends TestCase
             'menuable_type' => 'Biostate\\FilamentMenuBuilder\\Tests\\Models\\TestModel',
             'menuable_id' => 1,
         ]);
-        
+
         // Since we don't have a real menuable model, it should fall back to original name
         $this->assertEquals('Original Name', $menuItem->menu_name);
     }
@@ -93,7 +93,7 @@ class MenuItemTest extends TestCase
     public function test_get_normalized_type_attribute_for_non_model_type(): void
     {
         $menuItem = MenuItem::factory()->create(['type' => MenuItemType::Link]);
-        
+
         $this->assertEquals('Link', $menuItem->normalized_type);
     }
 
@@ -103,7 +103,7 @@ class MenuItemTest extends TestCase
             'type' => MenuItemType::Model,
             'menuable_type' => 'Biostate\\FilamentMenuBuilder\\Tests\\Models\\TestModel',
         ]);
-        
+
         $this->assertEquals('TestModel', $menuItem->normalized_type);
     }
 
@@ -113,7 +113,7 @@ class MenuItemTest extends TestCase
             'type' => MenuItemType::Link,
             'url' => 'https://example.com',
         ]);
-        
+
         $this->assertEquals('https://example.com', $menuItem->link);
     }
 
@@ -124,7 +124,7 @@ class MenuItemTest extends TestCase
             'route' => 'home',
             'route_parameters' => ['id' => 1],
         ]);
-        
+
         // This will test the route generation, but may fail if route doesn't exist
         $this->assertIsString($menuItem->link);
     }
@@ -136,7 +136,7 @@ class MenuItemTest extends TestCase
             'menuable_type' => 'Biostate\\FilamentMenuBuilder\\Tests\\Models\\TestModel',
             'menuable_id' => 1,
         ]);
-        
+
         // Since we don't have a real menuable model, it should return '#'
         $this->assertEquals('#', $menuItem->link);
     }
@@ -144,28 +144,28 @@ class MenuItemTest extends TestCase
     public function test_resolve_url_method_with_valid_url(): void
     {
         $menuItem = MenuItem::factory()->create(['url' => 'https://example.com']);
-        
+
         $this->assertEquals('https://example.com', $menuItem->resolveUrl());
     }
 
     public function test_resolve_url_method_with_relative_url(): void
     {
         $menuItem = MenuItem::factory()->create(['url' => '/about']);
-        
+
         $this->assertEquals(url('/about'), $menuItem->resolveUrl());
     }
 
     public function test_resolve_url_method_with_hash(): void
     {
         $menuItem = MenuItem::factory()->create(['url' => '#']);
-        
+
         $this->assertEquals('#', $menuItem->resolveUrl());
     }
 
     public function test_resolve_url_method_with_null_url(): void
     {
         $menuItem = MenuItem::factory()->create(['url' => null]);
-        
+
         $this->assertEquals(url('/'), $menuItem->resolveUrl());
     }
 
@@ -177,14 +177,14 @@ class MenuItemTest extends TestCase
             'menu_id' => $menu->id,
             'parent_id' => $parentItem->id,
         ]);
-        
+
         $this->assertEquals($parentItem->id, $childItem->parent_id);
     }
 
     public function test_timestamps_disabled(): void
     {
         $menuItem = MenuItem::factory()->create();
-        
+
         $this->assertFalse($menuItem->timestamps);
     }
 
@@ -192,15 +192,15 @@ class MenuItemTest extends TestCase
     {
         $menu = Menu::factory()->create();
         $menuItem = MenuItem::factory()->create(['menu_id' => $menu->id]);
-        
+
         $originalUpdatedAt = $menu->updated_at;
-        
+
         // Wait a moment to ensure timestamp difference
         sleep(1);
-        
+
         // Update the menu item
         $menuItem->update(['name' => 'Updated Name']);
-        
+
         // The menu should be touched (updated_at should change)
         $this->assertNotEquals($originalUpdatedAt, $menu->fresh()->updated_at);
     }
@@ -210,7 +210,7 @@ class MenuItemTest extends TestCase
         $menuItem = MenuItem::factory()->create([
             'parameters' => ['key1' => 'value1', 'key2' => 'value2'],
         ]);
-        
+
         $this->assertInstanceOf(Collection::class, $menuItem->parameters);
         $this->assertEquals('value1', $menuItem->parameters['key1']);
         $this->assertEquals('value2', $menuItem->parameters['key2']);
@@ -221,7 +221,7 @@ class MenuItemTest extends TestCase
         $menuItem = MenuItem::factory()->create([
             'route_parameters' => ['id' => 1, 'slug' => 'test'],
         ]);
-        
+
         $this->assertInstanceOf(Collection::class, $menuItem->route_parameters);
         $this->assertEquals(1, $menuItem->route_parameters['id']);
         $this->assertEquals('test', $menuItem->route_parameters['slug']);
@@ -230,7 +230,7 @@ class MenuItemTest extends TestCase
     public function test_factory_creation(): void
     {
         $menuItem = MenuItem::factory()->create();
-        
+
         $this->assertInstanceOf(MenuItem::class, $menuItem);
         $this->assertNotNull($menuItem->name);
         $this->assertNotNull($menuItem->type);
@@ -253,7 +253,7 @@ class MenuItemTest extends TestCase
             'wrapper_class' => 'custom-wrapper',
             'parameters' => ['custom' => 'param'],
         ]);
-        
+
         $this->assertEquals('Test Item', $menuItem->name);
         $this->assertEquals('_blank', $menuItem->target);
         $this->assertEquals(MenuItemType::Link, $menuItem->type);

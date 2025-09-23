@@ -53,8 +53,8 @@ class MenuItemTypeTest extends TestCase
     public function test_enum_has_expected_cases(): void
     {
         $cases = MenuItemType::cases();
-        $caseValues = array_map(fn($case) => $case->value, $cases);
-        
+        $caseValues = array_map(fn ($case) => $case->value, $cases);
+
         $this->assertContains('link', $caseValues);
         $this->assertContains('route', $caseValues);
         $this->assertContains('model', $caseValues);

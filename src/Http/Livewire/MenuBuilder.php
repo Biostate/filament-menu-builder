@@ -197,10 +197,10 @@ class MenuBuilder extends Component implements HasActions, HasForms
         $query = MenuItem::query()
             ->where('menu_id', $this->menuId)
             ->with('menuable');
-            
+
         /** @var \Kalnoy\Nestedset\Collection $items */
         $items = $query->defaultOrder()->get();
-        
+
         return $items->toTree();
     }
 

@@ -17,7 +17,7 @@ class MenuItemTargetTest extends TestCase
     {
         $selfLabel = MenuItemTarget::Self->getLabel();
         $blankLabel = MenuItemTarget::Blank->getLabel();
-        
+
         $this->assertNotNull($selfLabel);
         $this->assertNotNull($blankLabel);
         $this->assertIsString($selfLabel);
@@ -29,7 +29,7 @@ class MenuItemTargetTest extends TestCase
         // Test that labels are loaded from translation files
         $selfLabel = MenuItemTarget::Self->getLabel();
         $blankLabel = MenuItemTarget::Blank->getLabel();
-        
+
         // Labels should be translation keys or actual translated text
         $this->assertNotEmpty($selfLabel);
         $this->assertNotEmpty($blankLabel);
@@ -54,8 +54,8 @@ class MenuItemTargetTest extends TestCase
     public function test_enum_has_expected_cases(): void
     {
         $cases = MenuItemTarget::cases();
-        $caseValues = array_map(fn($case) => $case->value, $cases);
-        
+        $caseValues = array_map(fn ($case) => $case->value, $cases);
+
         $this->assertContains('_self', $caseValues);
         $this->assertContains('_blank', $caseValues);
     }
@@ -63,7 +63,7 @@ class MenuItemTargetTest extends TestCase
     public function test_enum_values_are_valid_html_targets(): void
     {
         $cases = MenuItemTarget::cases();
-        
+
         foreach ($cases as $case) {
             // HTML target values should start with underscore
             $this->assertStringStartsWith('_', $case->value);

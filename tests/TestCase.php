@@ -55,28 +55,28 @@ class TestCase extends Orchestra
         config()->set('database.default', 'testing');
 
         // Run package migrations
-        $migration = include __DIR__.'/../database/migrations/create_menus_table.php.stub';
+        $migration = include __DIR__ . '/../database/migrations/create_menus_table.php.stub';
         $migration->up();
-        
-        $migration = include __DIR__.'/../database/migrations/create_menu_items_table.php.stub';
+
+        $migration = include __DIR__ . '/../database/migrations/create_menu_items_table.php.stub';
         $migration->up();
-        
-        $migration = include __DIR__.'/../database/migrations/make_menus_slug_unique.php.stub';
+
+        $migration = include __DIR__ . '/../database/migrations/make_menus_slug_unique.php.stub';
         $migration->up();
 
         // Run test migrations
-        $migration = include __DIR__.'/migrations/create_test_models_table.php';
+        $migration = include __DIR__ . '/migrations/create_test_models_table.php';
         $migration->up();
     }
 
     protected function defineRoutes($router)
     {
-        $router->get('/test/{model}', function($model) {
+        $router->get('/test/{model}', function ($model) {
             return "Test route for {$model}";
         })->name('test.show');
-        
-        $router->get('/home', function() {
-            return "Home page";
+
+        $router->get('/home', function () {
+            return 'Home page';
         })->name('home');
     }
 }

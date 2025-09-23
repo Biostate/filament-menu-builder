@@ -39,12 +39,14 @@ class FilamentMenuBuilderPlugin implements Plugin
     public function usingMenuResource(string $menuResource): static
     {
         $this->menuResource = $menuResource;
+
         return $this;
     }
-    
+
     public function usingMenuItemResource(string $menuItemResource): static
     {
         $this->menuItemResource = $menuItemResource;
+
         return $this;
     }
 
