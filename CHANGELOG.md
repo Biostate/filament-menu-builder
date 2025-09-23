@@ -2,6 +2,13 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## Support Filament v4 - 2025-09-23
+
+This version upgrades the package to fully support Filament v4.
+I have tested it in my own projects, but please proceed with caution before using it in production environments.
+
+I hope this package helps you build powerful applications!
+
 ## v1.0.9 - 2025-02-20
 
 Improve menu slug handling:
