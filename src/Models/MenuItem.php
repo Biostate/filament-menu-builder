@@ -27,6 +27,9 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property-read string $menu_name
  * @property-read string $normalized_type
  * @property-read string $link
+ * @property-read \Illuminate\Database\Eloquent\Model|null $menuable
+ * 
+ * @method static void rebuildTree(array $data, bool $delete = false, mixed $root = null)
  */
 class MenuItem extends Model
 {
@@ -74,7 +77,7 @@ class MenuItem extends Model
     {
         $name = $this->attributes['name'];
         if ($this->type === MenuItemType::Model && $this->use_menuable_name) {
-            $name = $this->menuable?->menu_name;
+            $name = $this->menuable?->menu_name ?? $this->attributes['name'];
         }
 
         return $name ?? $this->attributes['name'];

@@ -15,6 +15,12 @@ use Filament\Support\Enums\Size;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
+/**
+ * @property int $menuId
+ * @property array $data
+ * @property \Illuminate\Database\Eloquent\Model $menuItem
+ * @property \Illuminate\Database\Eloquent\Model $newMenuItem
+ */
 class MenuBuilder extends Component implements HasActions, HasForms
 {
     use InteractsWithActions;
@@ -75,7 +81,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
 
                 return $menuItem->toArray();
             })
-            ->form(fn () => [
+            ->schema([
                 Grid::make()
                     ->schema(MenuItemResource::getFormSchema()),
             ])
@@ -99,7 +105,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->size(Size::ExtraSmall)
             ->icon('heroicon-m-plus')
             ->iconButton()
-            ->form(fn () => [
+            ->schema([
                 Grid::make()
                     ->schema(MenuItemResource::getFormSchema()),
             ])
@@ -153,6 +159,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
                     return;
                 }
 
+                /** @var MenuItem $newMenuItem */
                 $newMenuItem = $menuItem->replicate();
                 $newMenuItem->name = $newMenuItem->name . ' (copy)';
                 $newMenuItem->afterNode($menuItem)->save();

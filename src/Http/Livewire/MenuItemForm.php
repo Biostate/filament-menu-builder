@@ -10,6 +10,11 @@ use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
 use Livewire\Component;
 
+/**
+ * @property int $menuId
+ * @property array|null $data
+ * @property \Filament\Schemas\Schema $form
+ */
 class MenuItemForm extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
