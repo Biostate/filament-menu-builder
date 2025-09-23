@@ -66,6 +66,7 @@ class MenuResource extends Resource
                     ->copyMessage(__('filament-menu-builder::menu-builder.component_copy_message'))
                     ->copyMessageDuration(3000)
                     ->badge()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(fn (string $state): string => "<x-filament-menu-builder::menu slug=\"{$state}\" />"),
             ])
             ->filters([
