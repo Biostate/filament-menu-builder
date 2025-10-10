@@ -90,7 +90,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
 
                 $menuItem = MenuItem::find($menuItemId);
 
-                $temp = $data['route_parameters'];
+                $temp = $data['route_parameters'] ?? [];
                 $data['route_parameters'] = [];
 
                 foreach ($temp as $key => $value) {
