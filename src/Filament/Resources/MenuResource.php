@@ -93,6 +93,7 @@ class MenuResource extends Resource
 
     public static function getPages(): array
     {
+
         return [
             'index' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\ListMenus::route('/'),
             'create' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\CreateMenu::route('/create'),
