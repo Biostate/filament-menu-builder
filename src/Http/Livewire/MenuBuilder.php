@@ -133,11 +133,15 @@ class MenuBuilder extends Component implements HasActions, HasForms
 
     public function viewAction(): Action
     {
+        $panel = Filament::getCurrentPanel();
+        $plugin = $panel->getPlugin('filament-menu-builder');
+        $menuItemResource = $plugin->getMenuItemResource();
+
         // TODO: extend action and make new edit action for this component
         return Action::make('view')
             ->label(__('filament-menu-builder::menu-builder.view_menu_item_tooltip'))
             ->icon('heroicon-m-eye')
-            ->url(fn (array $arguments) => MenuItemResource::getUrl('edit', ['record' => $arguments['menuItemId']]));
+            ->url(fn (array $arguments) => $menuItemResource::getUrl('edit', ['record' => $arguments['menuItemId']]));
     }
 
     public function goToLinkAction(): Action
