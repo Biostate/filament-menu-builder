@@ -50,7 +50,6 @@ class FilamentMenuBuilderPlugin implements Plugin
         return $this;
     }
 
-    
     public function getMenuResource(): string
     {
         return $this->menuResource;
@@ -60,7 +59,6 @@ class FilamentMenuBuilderPlugin implements Plugin
     {
         return $this->menuItemResource;
     }
-
 
     public static function get(): static
     {

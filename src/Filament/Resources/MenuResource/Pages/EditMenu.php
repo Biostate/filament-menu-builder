@@ -4,7 +4,6 @@ namespace Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages;
 
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource;
 use Biostate\FilamentMenuBuilder\Models\Menu;
-use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -16,6 +15,7 @@ class EditMenu extends EditRecord
     protected function getActions(): array
     {
         $resource = static::getResource();
+
         return [
             Action::make(__('filament-menu-builder::menu-builder.configure_menu'))
                 ->url(fn (Menu $record): string => $resource::getUrl('build', ['record' => $record]))
