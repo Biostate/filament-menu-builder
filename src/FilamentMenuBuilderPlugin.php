@@ -50,6 +50,18 @@ class FilamentMenuBuilderPlugin implements Plugin
         return $this;
     }
 
+    
+    public function getMenuResource(): string
+    {
+        return $this->menuResource;
+    }
+
+    public function getMenuItemResource(): string
+    {
+        return $this->menuItemResource;
+    }
+
+
     public static function get(): static
     {
         /** @var static $plugin */
