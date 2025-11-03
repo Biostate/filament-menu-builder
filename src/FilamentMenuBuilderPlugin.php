@@ -68,7 +68,7 @@ class FilamentMenuBuilderPlugin implements Plugin
     }
 
     /**
-     * @return class-string<Resource>
+     * @return class-string<resource>
      */
     public function getMenuResource(): string
     {
@@ -76,7 +76,7 @@ class FilamentMenuBuilderPlugin implements Plugin
     }
 
     /**
-     * @return class-string<Resource>
+     * @return class-string<resource>
      */
     public function getMenuItemResource(): string
     {
