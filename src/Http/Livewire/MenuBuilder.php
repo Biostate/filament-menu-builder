@@ -55,12 +55,13 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->modalSubmitActionLabel(__('Destroy'))
             ->color('danger')
             ->action(function (array $arguments) {
-                $menuItemId = $arguments['menuItemId'];
+                $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
 
                 $menuItem = MenuItem::find($menuItemId);
                 if (! $menuItem) {
-                    return;
+                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
                 }
+
                 MenuItem::descendantsOf($menuItem->id)->each(function (MenuItem $descendant) {
                     $descendant->delete();
                 });
@@ -78,8 +79,12 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->icon('heroicon-m-pencil-square')
             ->iconButton()
             ->fillForm(function (array $arguments) {
-                $menuItemId = $arguments['menuItemId'];
+                $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
                 $menuItem = MenuItem::find($menuItemId);
+
+                if (! $menuItem) {
+                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
+                }
 
                 return $menuItem->toArray();
             })
@@ -88,19 +93,18 @@ class MenuBuilder extends Component implements HasActions, HasForms
                     ->schema(MenuItemResource::getFormSchema()),
             ])
             ->action(function (array $arguments, $data) {
-                $menuItemId = $arguments['menuItemId'];
+                $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
 
                 $menuItem = MenuItem::find($menuItemId);
+                if (! $menuItem) {
+                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
+                }
 
                 $temp = $data['route_parameters'] ?? [];
                 $data['route_parameters'] = [];
 
                 foreach ($temp as $key => $value) {
                     $data['route_parameters'][] = ['key' => $key, 'value' => $value];
-                }
-
-                if (! $menuItem) {
-                    return;
                 }
 
                 $menuItem->update($data);
@@ -120,9 +124,11 @@ class MenuBuilder extends Component implements HasActions, HasForms
                     ->schema(MenuItemResource::getFormSchema()),
             ])
             ->action(function (array $arguments, $data) {
-                $parent = MenuItem::find($arguments['menuItemId']);
+                $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
+
+                $parent = MenuItem::find($menuItemId);
                 if (! $parent) {
-                    return;
+                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
                 }
 
                 $menuItem = MenuItem::create([
@@ -136,15 +142,25 @@ class MenuBuilder extends Component implements HasActions, HasForms
     public function viewAction(): Action
     {
         $panel = Filament::getCurrentPanel();
-        /** @var FilamentMenuBuilderPlugin $plugin */
+        if (! $panel) {
+            throw new \RuntimeException('No active Filament panel');
+        }
+
+        /** @var FilamentMenuBuilderPlugin|null $plugin */
         $plugin = $panel->getPlugin('filament-menu-builder');
+        if (! $plugin instanceof FilamentMenuBuilderPlugin) {
+            throw new \RuntimeException('Filament Menu Builder plugin not registered');
+        }
+
         $menuItemResource = $plugin->getMenuItemResource();
 
         // TODO: extend action and make new edit action for this component
         return Action::make('view')
             ->label(__('filament-menu-builder::menu-builder.view_menu_item_tooltip'))
             ->icon('heroicon-m-eye')
-            ->url(fn (array $arguments) => $menuItemResource::getUrl('edit', ['record' => $arguments['menuItemId']]));
+            ->url(fn (array $arguments) => $menuItemResource::getUrl('edit', [
+                'record' => $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required'),
+            ]));
     }
 
     public function goToLinkAction(): Action
@@ -166,12 +182,12 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->requiresConfirmation()
             ->modalDescription('Are you sure you want to duplicate this menu item?')
             ->action(function (array $arguments) {
-                $menuItemId = $arguments['menuItemId'];
+                $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
                 $isEdit = isset($arguments['edit']);
 
                 $menuItem = MenuItem::find($menuItemId);
                 if (! $menuItem) {
-                    return;
+                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
                 }
 
                 /** @var MenuItem $newMenuItem */
