@@ -2,6 +2,42 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## v4.0.2 - 2025-11-03
+
+### v4.0.2 - Bug Fixes & Stability Improvements
+
+#### Bug Fixes
+
+- Fixed "Undefined array key 'route_parameters'" error when menu item type is 'link' (PR #12)
+- Added comprehensive null safety checks throughout MenuBuilder component to prevent fatal errors
+- Fixed resource resolution issues by implementing dynamic plugin-based system (PR #14)
+
+#### Improvements
+
+- Standardized error handling with descriptive exceptions instead of silent failures
+- Added input validation for menuItemId parameter in all action methods
+- Enhanced plugin validation for custom resource classes with proper type checking
+- Fixed PHPStan errors and warnings, improved type safety with PHPDoc annotations
+
+#### Architecture Changes
+
+- Refactored resource resolution from hardcoded classes to plugin-based dynamic resolution
+- Improved support for custom resource classes and multi-panel Filament setups
+- Enhanced FilamentMenuBuilderPlugin with resource validation methods
+
+#### Upgrade
+
+```bash
+composer update biostate/filament-menu-builder
+
+```
+#### New Contributors
+
+* @kohaku1907 made their first contribution in https://github.com/Biostate/filament-menu-builder/pull/12
+* @gsarigul84 made their first contribution in https://github.com/Biostate/filament-menu-builder/pull/14
+
+**Full Changelog**: https://github.com/Biostate/filament-menu-builder/compare/v4.0.1...v4.0.2
+
 ## v4.0.1 - 2025-09-23
 
 ### What's New
