@@ -3,6 +3,7 @@
 namespace Biostate\FilamentMenuBuilder\Http\Livewire;
 
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
+use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -135,6 +136,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
     public function viewAction(): Action
     {
         $panel = Filament::getCurrentPanel();
+        /** @var FilamentMenuBuilderPlugin $plugin */
         $plugin = $panel->getPlugin('filament-menu-builder');
         $menuItemResource = $plugin->getMenuItemResource();
 
