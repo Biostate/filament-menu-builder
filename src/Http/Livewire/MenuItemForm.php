@@ -43,6 +43,7 @@ class MenuItemForm extends Component implements HasSchemas
             throw new \RuntimeException('Filament Menu Builder plugin not registered');
         }
 
+        /** @var class-string<\Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource> $menuItemResource */
         $menuItemResource = $plugin->getMenuItemResource();
 
         return $schema
