@@ -14,6 +14,10 @@ class FilamentMenuBuilderPlugin implements Plugin
 
     protected string $menuItemResource = MenuItemResource::class;
 
+    protected string $menuModel = \Biostate\FilamentMenuBuilder\Models\Menu::class;
+
+    protected string $menuItemModel = \Biostate\FilamentMenuBuilder\Models\MenuItem::class;
+
     public function getId(): string
     {
         return 'filament-menu-builder';
@@ -81,6 +85,46 @@ class FilamentMenuBuilderPlugin implements Plugin
     public function getMenuItemResource(): string
     {
         return $this->menuItemResource;
+    }
+
+    public function usingMenuModel(string $menuModel): static
+    {
+        if (! class_exists($menuModel)) {
+            throw new \InvalidArgumentException("Class {$menuModel} does not exist");
+        }
+
+        if (! is_subclass_of($menuModel, \Illuminate\Database\Eloquent\Model::class)) {
+            throw new \InvalidArgumentException("Class {$menuModel} must extend " . \Illuminate\Database\Eloquent\Model::class);
+        }
+
+        $this->menuModel = $menuModel;
+
+        return $this;
+    }
+
+    public function usingMenuItemModel(string $menuItemModel): static
+    {
+        if (! class_exists($menuItemModel)) {
+            throw new \InvalidArgumentException("Class {$menuItemModel} does not exist");
+        }
+
+        if (! is_subclass_of($menuItemModel, \Illuminate\Database\Eloquent\Model::class)) {
+            throw new \InvalidArgumentException("Class {$menuItemModel} must extend " . \Illuminate\Database\Eloquent\Model::class);
+        }
+
+        $this->menuItemModel = $menuItemModel;
+
+        return $this;
+    }
+
+    public function getMenuModel(): string
+    {
+        return $this->menuModel;
+    }
+
+    public function getMenuItemModel(): string
+    {
+        return $this->menuItemModel;
     }
 
     public static function get(): static

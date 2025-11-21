@@ -13,7 +13,10 @@ use Filament\Tables\Table;
 
 class MenuResource extends Resource
 {
-    protected static ?string $model = Menu::class;
+    public static function getModel(): string
+    {
+        return \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuModel();
+    }
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bars-3';
 

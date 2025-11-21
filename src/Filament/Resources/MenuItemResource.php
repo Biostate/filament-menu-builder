@@ -5,8 +5,6 @@ namespace Biostate\FilamentMenuBuilder\Filament\Resources;
 use BackedEnum;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemTarget;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
-use Biostate\FilamentMenuBuilder\Models\Menu;
-use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Filament\Actions;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
@@ -20,7 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 class MenuItemResource extends Resource
 {
-    protected static ?string $model = MenuItem::class;
+    public static function getModel(): string
+    {
+        return \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuItemModel();
+    }
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bars-3';
 
@@ -87,7 +88,7 @@ class MenuItemResource extends Resource
                 ->maxLength(255),
             Select::make('menu_id')
                 ->label(__('filament-menu-builder::menu-builder.menu_name'))
-                ->options(Menu::all()->pluck('name', 'id'))
+                ->options(fn () => \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuModel()::all()->pluck('name', 'id'))
                 ->hidden(fn ($context) => ! in_array($context, ['edit', 'create']))
                 ->required(),
             Select::make('target')
