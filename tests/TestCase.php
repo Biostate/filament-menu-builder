@@ -38,6 +38,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
+            TestPanelProvider::class,
             ActionsServiceProvider::class,
             BladeCaptureDirectiveServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
