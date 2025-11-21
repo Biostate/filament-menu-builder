@@ -5,6 +5,7 @@ namespace Biostate\FilamentMenuBuilder\Filament\Resources;
 use BackedEnum;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemTarget;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
+use Biostate\FilamentMenuBuilder\Models\Menu;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Filament\Actions;
 use Filament\Forms\Components\KeyValue;
@@ -84,6 +85,11 @@ class MenuItemResource extends Resource
                 ->autofocus()
                 ->required()
                 ->maxLength(255),
+            Select::make('menu_id')
+                ->label(__('filament-menu-builder::menu-builder.menu_name'))
+                ->options(Menu::all()->pluck('name', 'id'))
+                ->hidden(fn ($context) => ! in_array($context, ['edit', 'create']))
+                ->required(),
             Select::make('target')
                 ->options(MenuItemTarget::class)
                 ->default('_self')
