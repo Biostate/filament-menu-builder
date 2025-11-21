@@ -2,13 +2,15 @@
 
 namespace Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages;
 
-use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListMenuItems extends ListRecords
 {
-    protected static string $resource = MenuItemResource::class;
+    public static function getResource(): string
+    {
+        return \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuItemResource();
+    }
 
     protected function getActions(): array
     {
