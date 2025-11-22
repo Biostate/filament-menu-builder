@@ -104,6 +104,26 @@ public function panel(Panel $panel): Panel
 }
 ```
 
+### Using Custom Models
+
+You can also specify custom model classes for Menu and MenuItem:
+
+```php
+use App\Models\CustomMenu;
+use App\Models\CustomMenuItem;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ... other configurations
+        ->plugins([
+            \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::make()
+                ->usingMenuModel(CustomMenu::class)
+                ->usingMenuItemModel(CustomMenuItem::class),
+        ]);
+}
+```
+
 ### Creating Custom Resource Classes
 
 Here's an example of how to extend the MenuItem resource:
