@@ -1,0 +1,14 @@
+root: ./
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+plugins:
+  - search
+  - code
+  - copy-code-button
+
+variables:
+  version: "latest"
+

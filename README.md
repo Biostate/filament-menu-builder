@@ -17,22 +17,20 @@ Built for simplicity and performance, this package ensures a seamless solution f
 ![Dark Theme](https://github.com/Biostate/filament-menu-builder/blob/main/art/configuration-dark.jpg?raw=true)
 ![Light Theme](https://github.com/Biostate/filament-menu-builder/blob/main/art/configuration-light.jpg?raw=true)
 
-Table of Contents:
-- [Installation](#installation)
-- [Custom Resources](#custom-resources)
-- [Caching](#caching)
-- [Menuable Trait](#menuable-trait)
-- [Routes](#routes)
-- [Blade Components](#blade-components)
-- [TODO](#todo)
+## 📚 Documentation
 
-## Installation
+**Full documentation is available at: [https://biostate.github.io/filament-menu-builder](https://biostate.github.io/filament-menu-builder)**
 
-You can install the package via composer:
+## Version Compatibility
 
-```bash
-composer require biostate/filament-menu-builder
-```
+| Filament Version | Package Version | Composer Command |
+|-----------------|-----------------|------------------|
+| v3 | 1.x | `composer require biostate/filament-menu-builder:^1.0` |
+| v4 | 4.x | `composer require biostate/filament-menu-builder:^4.0` |
+
+## Quick Start
+
+Install the package via Composer using the appropriate version from the compatibility table above:
 
 Add the plugin to your `AdminPanelServiceProvider.php`:
 
@@ -40,206 +38,20 @@ Add the plugin to your `AdminPanelServiceProvider.php`:
 public function panel(Panel $panel): Panel
 {
     return $panel
-        // Your other configurations
         ->plugins([
-            \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::make(), // Add this line
+            \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::make(),
         ]);
 }
 ```
 
-You can publish and run the migrations with:
+Publish and run migrations:
 
 ```bash
 php artisan vendor:publish --tag="filament-menu-builder-migrations"
 php artisan migrate
 ```
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="filament-menu-builder-config"
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="filament-menu-builder-views"
-```
-
-This package is requires custom theme that Filament provides.
-
-1. **Create a custom theme** following the [Filament documentation](https://filamentphp.com/docs/4.x/styling/overview#creating-a-custom-theme).
-
-2. **Add the package's views to your theme** by including this in your generated `theme.css`:
-
-```css
-@source '../../../../vendor/biostate/filament-menu-builder/resources/views/**/*';
-```
-3. Run this command in your project root:
-```bash
-npm run build
-```
-
-## Custom Resources
-
-You can extend the default Menu and MenuItem resources to customize their behavior. This is useful when you want to modify labels, add custom fields, or implement additional functionality.
-
-### Using Custom Resources
-
-In your `AdminPanelProvider.php` file, you can specify custom resource classes:
-
-```php
-use App\CustomClasses\MenuResource;
-use App\CustomClasses\MenuItemResource;
-
-public function panel(Panel $panel): Panel
-{
-    return $panel
-        // ... other configurations
-        ->plugins([
-            \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::make()
-                ->usingMenuResource(MenuResource::class)
-                ->usingMenuItemResource(MenuItemResource::class),
-        ]);
-}
-```
-
-### Using Custom Models
-
-You can also specify custom model classes for Menu and MenuItem:
-
-```php
-use App\Models\CustomMenu;
-use App\Models\CustomMenuItem;
-
-public function panel(Panel $panel): Panel
-{
-    return $panel
-        // ... other configurations
-        ->plugins([
-            \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::make()
-                ->usingMenuModel(CustomMenu::class)
-                ->usingMenuItemModel(CustomMenuItem::class),
-        ]);
-}
-```
-
-### Creating Custom Resource Classes
-
-Here's an example of how to extend the MenuItem resource:
-
-```php
-<?php
-
-namespace App\CustomClasses;
-
-use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource as BaseMenuItemResource;
-
-class MenuItemResource extends BaseMenuItemResource
-{
-    public static function getModelLabel(): string
-    {
-        return 'Custom ' . parent::getModelLabel();
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return 'Custom ' . parent::getPluralModelLabel();
-    }
-}
-```
-
-You can also extend the Menu resource in a similar way:
-
-```php
-<?php
-
-namespace App\CustomClasses;
-
-use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource as BaseMenuResource;
-
-class MenuResource extends BaseMenuResource
-{
-    public static function getModelLabel(): string
-    {
-        return 'Custom ' . parent::getModelLabel();
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return 'Custom ' . parent::getPluralModelLabel();
-    }
-}
-```
-
-## Caching
-
-Menu items are cached in view component by default. If you want to disable caching, you can set the `cache` configuration to `false`.
-
-## Menuable Trait
-
-You can create relationships between menu items and your models. To enable this feature, you need to add the `Menuable` trait to your model and implement the `getMenuLinkAttribute` method.
-If you want to use the model name as the menu item name, you can use the `getMenuNameAttribute` method.
-
-```php
-use Biostate\FilamentMenuBuilder\Traits\Menuable;
-
-class Product extends Model
-{
-    use Menuable;
-    
-    public function getMenuLinkAttribute(): string
-    {
-        return route('products.show', $this);
-    }
-    
-    public function getMenuNameAttribute(): string
-    {
-        return $this->name;
-    }
-}
-```
-
-After this you need to add your model in to the config file. You can add multiple models. eg:
-
-```php
-return [
-    'models' => [
-        'Product' => \App\Models\Product::class,
-    ],
-];
-```
-
-If you add these configurations, you can see the menu items in the menu item forms as a select input.
-
-## Routes
-
-You can use your routes in the menu items. But if you want to exclude some routes, you can use the `exclude_route_names` configuration.
-Package excludes the debugbar routes, filament routes, and livewire routes in default.
-
-```php
-'exclude_route_names' => [
-    '/^debugbar\./', // Exclude debugbar routes
-    '/^filament\./',   // Exclude filament routes
-    '/^livewire\./',   // Exclude livewire routes
-],
-```
-
-## Blade Components
-
-This package provides some blade components to render the menu items. You can use these components in your blade files. You can get this code in the menus table. For example:
-
-```html
-<x-filament-menu-builder::menu slug="main-menu" />
-```
-
-This blade component will render the menu items with the `main-menu` slug. You can also publish the views and customize the blade components.
-
-Also you can give a custom view to the component. This package supports Bootstrap 5 by default. For example:
-
-```html
-<x-filament-menu-builder::menu slug="main-menu" view="filament-menu-builder::components.bootstrap5.menu"/>
-```
+For detailed installation instructions and configuration, see the [Installation Guide](https://biostate.github.io/filament-menu-builder/installation).
 
 ## TODO
 
