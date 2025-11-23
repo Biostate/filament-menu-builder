@@ -9,10 +9,18 @@
 
 ## Requirements
 
+**For version 4.x (Filament v4):**
+- PHP 8.2 or higher
+- Filament 4.0 or higher
+- Filament Forms 4.0 or higher
+- Filament Tables 4.0 or higher
+- Spatie Laravel Package Tools 1.15.0 or higher
+- Kalnoy NestedSet 6.0 or higher
+- Spatie Laravel Sluggable 3.6 or higher
+
+**For version 1.x (Filament v3):**
 - PHP 8.1 or higher
-- Laravel 10.0 or higher
-- Filament 3.0 or higher (for version 1.x)
-- Filament 4.0 or higher (for version 4.x)
+- Filament 3.0 or higher
 
 ## Step 1: Install via Composer
 

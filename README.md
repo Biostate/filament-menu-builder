@@ -19,7 +19,7 @@ Built for simplicity and performance, this package ensures a seamless solution f
 
 ## 📚 Documentation
 
-**Full documentation is available at: [https://biostate.github.io/filament-menu-builder](https://biostate.github.io/filament-menu-builder)**
+**Full documentation is available at: [https://biostate.gitbook.io/filament-menu-builder](https://biostate.gitbook.io/filament-menu-builder)**
 
 ## Version Compatibility
 
@@ -51,7 +51,7 @@ php artisan vendor:publish --tag="filament-menu-builder-migrations"
 php artisan migrate
 ```
 
-For detailed installation instructions and configuration, see the [Installation Guide](https://biostate.github.io/filament-menu-builder/installation).
+For detailed installation instructions and configuration, see the [Installation Guide](https://biostate.gitbook.io/filament-menu-builder/installation).
 
 ## TODO
 
