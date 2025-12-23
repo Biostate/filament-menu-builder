@@ -2,7 +2,6 @@
 
 namespace Biostate\FilamentMenuBuilder\Http\Livewire;
 
-use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
 use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Filament\Actions\Action;
@@ -72,6 +71,19 @@ class MenuBuilder extends Component implements HasActions, HasForms
 
     public function editAction(): Action
     {
+        $panel = Filament::getCurrentPanel();
+        if (! $panel) {
+            throw new \RuntimeException('No active Filament panel');
+        }
+
+        /** @var FilamentMenuBuilderPlugin|null $plugin */
+        $plugin = $panel->getPlugin('filament-menu-builder');
+        if (! $plugin instanceof FilamentMenuBuilderPlugin) {
+            throw new \RuntimeException('Filament Menu Builder plugin not registered');
+        }
+
+        $menuItemResource = $plugin->getMenuItemResource();
+
         // TODO: extend action and make new edit action for this component
         return Action::make('edit')
             ->tooltip(__('filament-menu-builder::menu-builder.edit_menu_item_tooltip'))
@@ -90,7 +102,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
             })
             ->schema([
                 Grid::make()
-                    ->schema(MenuItemResource::getFormSchema()),
+                    ->schema($menuItemResource::getFormSchema()),
             ])
             ->action(function (array $arguments, $data) {
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
@@ -113,6 +125,19 @@ class MenuBuilder extends Component implements HasActions, HasForms
 
     public function createSubItemAction(): Action
     {
+        $panel = Filament::getCurrentPanel();
+        if (! $panel) {
+            throw new \RuntimeException('No active Filament panel');
+        }
+
+        /** @var FilamentMenuBuilderPlugin|null $plugin */
+        $plugin = $panel->getPlugin('filament-menu-builder');
+        if (! $plugin instanceof FilamentMenuBuilderPlugin) {
+            throw new \RuntimeException('Filament Menu Builder plugin not registered');
+        }
+
+        $menuItemResource = $plugin->getMenuItemResource();
+
         // TODO: extend action and make new edit action for this component
         return Action::make('createSubItem')
             ->tooltip(__('filament-menu-builder::menu-builder.create_sub_item_tooltip'))
@@ -121,7 +146,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->iconButton()
             ->schema([
                 Grid::make()
-                    ->schema(MenuItemResource::getFormSchema()),
+                    ->schema($menuItemResource::getFormSchema()),
             ])
             ->action(function (array $arguments, $data) {
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
