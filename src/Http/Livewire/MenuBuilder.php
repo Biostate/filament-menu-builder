@@ -50,8 +50,8 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->iconButton()
             ->requiresConfirmation()
             ->modalHeading(__('filament-menu-builder::menu-builder.destroy_menu_item_heading'))
-            ->modalDescription('Are you sure you want to delete this menu item? All items below will be deleted as well.')
-            ->modalSubmitActionLabel(__('Destroy'))
+            ->modalDescription(__('filament-menu-builder::menu-builder.destroy_menu_item_description'))
+            ->modalSubmitActionLabel(__('filament-menu-builder::menu-builder.delete_menu_item_tooltip'))
             ->color('danger')
             ->action(function (array $arguments) {
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
@@ -87,6 +87,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
         // TODO: extend action and make new edit action for this component
         return Action::make('edit')
             ->tooltip(__('filament-menu-builder::menu-builder.edit_menu_item_tooltip'))
+            ->modalHeading(__('filament-menu-builder::menu-builder.edit_menu_item_tooltip'))
             ->size(Size::ExtraSmall)
             ->icon('heroicon-m-pencil-square')
             ->iconButton()
@@ -141,6 +142,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
         // TODO: extend action and make new edit action for this component
         return Action::make('createSubItem')
             ->tooltip(__('filament-menu-builder::menu-builder.create_sub_item_tooltip'))
+            ->modalHeading(__('filament-menu-builder::menu-builder.create_sub_item_tooltip'))
             ->size(Size::ExtraSmall)
             ->icon('heroicon-m-plus')
             ->iconButton()
@@ -205,7 +207,8 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->icon('heroicon-m-document-duplicate')
             ->iconButton()
             ->requiresConfirmation()
-            ->modalDescription('Are you sure you want to duplicate this menu item?')
+            ->modalHeading(__('filament-menu-builder::menu-builder.duplicate_menu_item_tooltip'))
+            ->modalDescription(__('filament-menu-builder::menu-builder.duplicate_confirm_description'))
             ->action(function (array $arguments) {
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
                 $isEdit = isset($arguments['edit']);
@@ -228,7 +231,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
             })
             ->extraModalFooterActions(fn (Action $action): array => [
                 $action->makeModalSubmitAction('duplicateAndEdit', arguments: ['edit' => true])
-                    ->label('Duplicate & Edit'),
+                    ->label(__('filament-menu-builder::menu-builder.duplicate_and_edit')),
             ]);
     }
 

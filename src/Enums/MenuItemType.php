@@ -2,7 +2,9 @@
 
 namespace Biostate\FilamentMenuBuilder\Enums;
 
-enum MenuItemType: string
+use Filament\Support\Contracts\HasLabel;
+
+enum MenuItemType: string implements HasLabel
 {
     case Link = 'link';
     case Route = 'route';
@@ -11,9 +13,9 @@ enum MenuItemType: string
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::Link => 'Link',
-            self::Route => 'Route',
-            self::Model => 'Model',
+            self::Link => __('filament-menu-builder::menu-builder.type.link'),
+            self::Route => __('filament-menu-builder::menu-builder.type.route'),
+            self::Model => __('filament-menu-builder::menu-builder.type.model')
         };
     }
 

@@ -49,7 +49,7 @@
             class="mt-2"
         >
             <x-filament::loading-indicator wire:loading class="h-5 w-5" />
-            {{ __('Save') }}
+            {{ __('filament-menu-builder::menu-builder.save') }}
         </x-filament::button>
 
         <x-filament::button
@@ -61,7 +61,7 @@
             wire:click="$refresh"
         >
             <x-filament::loading-indicator wire:loading class="h-5 w-5" />
-            {{ __('Reset') }}
+            {{ __('filament-menu-builder::menu-builder.reset') }}
         </x-filament::button>
         <p class="text-gray-500 text-center mt-2 text-[13px]">
             {{ __('filament-menu-builder::menu-builder.menu_item_information') }}

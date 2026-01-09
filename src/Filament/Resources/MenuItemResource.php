@@ -92,6 +92,7 @@ class MenuItemResource extends Resource
                 ->hidden(fn ($context) => ! in_array($context, ['edit', 'create']))
                 ->required(),
             Select::make('target')
+                ->label(__('filament-menu-builder::menu-builder.form_labels.target'))
                 ->options(MenuItemTarget::class)
                 ->default('_self')
                 ->required(),
