@@ -64,7 +64,7 @@ class MenuResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
-                    ->label('Component')
+                    ->label(__('filament-menu-builder::menu-builder.form_labels.component'))
                     ->copyable()
                     ->copyMessage(__('filament-menu-builder::menu-builder.component_copy_message'))
                     ->copyMessageDuration(3000)

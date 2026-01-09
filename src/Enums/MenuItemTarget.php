@@ -2,7 +2,9 @@
 
 namespace Biostate\FilamentMenuBuilder\Enums;
 
-enum MenuItemTarget: string
+use Filament\Support\Contracts\HasLabel;
+
+enum MenuItemTarget: string implements HasLabel
 {
     case Self = '_self';
     case Blank = '_blank';
@@ -10,8 +12,8 @@ enum MenuItemTarget: string
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::Self => __('filament-menu-builder::menu_items.target._self'),
-            self::Blank => __('filament-menu-builder::menu_items.target._blank'),
+            self::Self => __('filament-menu-builder::menu-builder.target._self'),
+            self::Blank => __('filament-menu-builder::menu-builder.target._blank'),
         };
     }
 }

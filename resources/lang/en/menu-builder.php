@@ -22,16 +22,21 @@ return [
     'route_parameters_has_parameters_helper_text' => 'Route parameters: :parameters. Also, you can use query parameters too.',
     'parameters_helper_text' => 'You can use: :parameters ',
 
+    'reset' => 'Reset',
+    'save' => 'Save',
     'delete_menu_item_tooltip' => 'Delete',
     'edit_menu_item_tooltip' => 'Edit',
     'create_sub_item_tooltip' => 'Create Sub Item',
     'view_menu_item_tooltip' => 'View',
     'go_to_link_tooltip' => 'Go to link',
     'duplicate_menu_item_tooltip' => 'Duplicate',
+    'duplicate_and_edit' => 'Duplicate & Edit',
+    'duplicate_confirm_description' => 'Are you sure you want to duplicate this menu item?',
 
     'form_labels' => [
         'name' => 'Name',
         'slug' => 'Slug',
+        'component' => 'Composant',
         'target' => 'Target',
         'link_class' => 'Link Class',
         'wrapper_class' => 'Wrapper Class',
@@ -49,11 +54,18 @@ return [
         'slug' => 'Slug',
     ],
 
+    'create_new_menu_item' => 'Create New Menu Item',
     'create_menu_item' => 'Create Menu Item',
 
     'target' => [
         '_self' => 'Same Tab',
         '_blank' => 'New Tab',
+    ],
+
+    'type' => [
+        'link' => 'Link',
+        'route' => 'Route',
+        'model' => 'Model',
     ],
 
     'component_copy_message' => 'Blade Component Copied! Just paste it in your blade file.',

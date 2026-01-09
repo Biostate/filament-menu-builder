@@ -48,8 +48,8 @@ class MenuItemForm extends Component implements HasSchemas
 
         return $schema
             ->components([
-                Section::make('Menu Item')
-                    ->description('Create New Menu Item')
+                Section::make(__('filament-menu-builder::menu-builder.menu_item'))
+                    ->description(__('filament-menu-builder::menu-builder.create_new_menu_item'))
                     ->schema($menuItemResource::getFormSchemaArray())
                     ->footerActions([
                         \Filament\Actions\Action::make('submit')
