@@ -2,6 +2,10 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## v4.0.6 - 2026-01-19
+
+**Full Changelog**: https://github.com/Biostate/filament-menu-builder/compare/v4.0.5...v4.0.6
+
 ## v4.0.5 - 2025-11-21
 
 ### Added
@@ -73,6 +77,7 @@ All notable changes to `filament-menu-builder` will be documented in this file.
 
 ```bash
 composer update biostate/filament-menu-builder
+
 
 
 ```
