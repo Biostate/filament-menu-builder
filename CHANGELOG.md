@@ -2,6 +2,21 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## v5.0.0 - 2026-02-13
+
+### What's Changed
+
+* fix: use registered MenuItemResource for edit and create actions ( menu item modal forms) by @g1R87 in https://github.com/Biostate/filament-menu-builder/pull/18
+* Fix hardcoded translations and add French language by @agencetwogether in https://github.com/Biostate/filament-menu-builder/pull/19
+* Support Filament V5 by @agencetwogether in https://github.com/Biostate/filament-menu-builder/pull/20
+
+### New Contributors
+
+* @g1R87 made their first contribution in https://github.com/Biostate/filament-menu-builder/pull/18
+* @agencetwogether made their first contribution in https://github.com/Biostate/filament-menu-builder/pull/19
+
+**Full Changelog**: https://github.com/Biostate/filament-menu-builder/compare/v4.0.6...v5.0.0
+
 ## v4.0.6 - 2026-01-19
 
 **Full Changelog**: https://github.com/Biostate/filament-menu-builder/compare/v4.0.5...v4.0.6
@@ -77,6 +92,7 @@ All notable changes to `filament-menu-builder` will be documented in this file.
 
 ```bash
 composer update biostate/filament-menu-builder
+
 
 
 
