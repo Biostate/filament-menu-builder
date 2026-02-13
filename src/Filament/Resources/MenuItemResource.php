@@ -3,6 +3,7 @@
 namespace Biostate\FilamentMenuBuilder\Filament\Resources;
 
 use BackedEnum;
+use Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemTarget;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
 use Filament\Actions;
@@ -16,7 +17,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Route;
 
-class MenuItemResource extends Resource
+class MenuItemResource extends Resource implements MenuItemResourceInterface
 {
     public static function getModel(): string
     {

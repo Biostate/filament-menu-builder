@@ -44,6 +44,8 @@ public function panel(Panel $panel): Panel
 
 ## Creating Custom Resource Classes
 
+Custom menu item resources must extend the base `MenuItemResource` or implement `Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface` (defining `getFormSchema()`, `getFormSchemaArray()`, and `getUrl()`).
+
 Here's an example of how to extend the MenuItem resource:
 
 ```php
