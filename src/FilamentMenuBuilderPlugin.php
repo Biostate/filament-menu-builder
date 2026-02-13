@@ -2,7 +2,6 @@
 
 namespace Biostate\FilamentMenuBuilder;
 
-use Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface;
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource;
 use Filament\Contracts\Plugin;
