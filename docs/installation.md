@@ -6,8 +6,18 @@
 |-----------------|-----------------|------------------|
 | v3 | 1.x | `composer require biostate/filament-menu-builder:^1.0` |
 | v4 | 4.x | `composer require biostate/filament-menu-builder:^4.0` |
+| v5 | 5.x | `composer require biostate/filament-menu-builder:^5.0` |
 
 ## Requirements
+
+**For version 5.x (Filament v5):**
+- PHP 8.2 or higher
+- Filament 5.0 or higher
+- Filament Forms 5.0 or higher
+- Filament Tables 5.0 or higher
+- Spatie Laravel Package Tools 1.15.0 or higher
+- Kalnoy NestedSet 6.0 or higher
+- Spatie Laravel Sluggable 3.6 or higher
 
 **For version 4.x (Filament v4):**
 - PHP 8.2 or higher

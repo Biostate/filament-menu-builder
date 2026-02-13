@@ -13,6 +13,7 @@ Built for simplicity and performance, this package ensures a seamless solution f
 |-----------------|-----------------|
 | v3 | 1.x |
 | v4 | 4.x |
+| v5 | 5.x |
 
 ![Dark Theme](https://github.com/Biostate/filament-menu-builder/blob/main/art/configuration-dark.jpg?raw=true)
 ![Light Theme](https://github.com/Biostate/filament-menu-builder/blob/main/art/configuration-light.jpg?raw=true)

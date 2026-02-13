@@ -27,6 +27,7 @@ Built for simplicity and performance, this package ensures a seamless solution f
 |-----------------|-----------------|------------------|
 | v3 | 1.x | `composer require biostate/filament-menu-builder:^1.0` |
 | v4 | 4.x | `composer require biostate/filament-menu-builder:^4.0` |
+| v5 | 5.x | `composer require biostate/filament-menu-builder:^5.0` |
 
 ## Quick Start
 
