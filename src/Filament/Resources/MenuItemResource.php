@@ -120,9 +120,9 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
                     // URL
                     TextInput::make('url')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.url'))
-                        ->hidden(fn ($get) => $get('type')->value != 'link')
+                        ->hidden(fn ($get) => $get('type')?->value != 'link')
                         ->maxLength(255)
-                        ->required(fn ($get) => $get('type')->value == 'link'),
+                        ->required(fn ($get) => $get('type')?->value == 'link'),
                     // ROUTE
                     Select::make('route')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.route'))
@@ -158,8 +158,8 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
                                 return $routes;
                             }
                         )
-                        ->hidden(fn ($get) => $get('type')->value != 'route')
-                        ->required(fn ($get) => $get('type')->value == 'route')
+                        ->hidden(fn ($get) => $get('type')?->value != 'route')
+                        ->required(fn ($get) => $get('type')?->value == 'route')
                         ->afterStateUpdated(function (callable $set, callable $get, $state) {
                             if ($state === null) {
                                 return [];
@@ -183,7 +183,7 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
                         ->live(),
                     KeyValue::make('route_parameters')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.route_parameters'))
-                        ->hidden(fn ($get) => $get('type')->value != 'route')
+                        ->hidden(fn ($get) => $get('type')?->value != 'route')
                         ->helperText(function ($get, $set, $operation) {
                             if ($get('route') === null) {
                                 return __('filament-menu-builder::menu-builder.route_parameters_empty_helper_text');
