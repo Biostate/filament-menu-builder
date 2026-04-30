@@ -2,7 +2,7 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
-## Unreleased
+## v5.0.3 - 2026-04-30
 
 ### Changed
 
@@ -15,6 +15,8 @@ All notable changes to `filament-menu-builder` will be documented in this file.
 * Run PHPStan against PHP 8.2 / 8.3 / 8.4 with an explicit `--memory-limit=512M` so analysis no longer fails opaquely on memory exhaustion.
 * Add `concurrency` groups to all workflows so superseded pushes cancel in-flight runs.
 * `composer analyse` now mirrors CI's memory limit.
+
+**Full Changelog**: https://github.com/Biostate/filament-menu-builder/compare/v5.0.2...v5.0.3
 
 ## v5.0.2 - 2026-04-30
 
