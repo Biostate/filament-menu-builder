@@ -2,6 +2,12 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## Unreleased
+
+### Tests
+
+* Add regression coverage for issue #23: a `NamelessMenuable` test fixture that mirrors the exact bug shape (no `name` column, display name computed via `getMenuNameAttribute()`), plus tests that exercise the `MenuItemResource` Select options pipeline. Reverting the v5.0.2 trait fix now causes these tests to fail with `[null, null]` instead of model labels.
+
 ## v5.0.3 - 2026-04-30
 
 ### Changed
