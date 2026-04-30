@@ -2,6 +2,20 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+* Disable Pint's `fully_qualified_strict_types` rule to stop the recurring loop where the auto-styling workflow shortened docblock generic FQCNs without adding the matching `use` import, which then broke PHPStan.
+* The auto-styling workflow now runs PHPStan after Pint and only commits the styling fix if PHPStan still passes — preventing the bot from publishing a broken commit.
+
+### CI
+
+* Expand the test matrix to PHP 8.2 / 8.3 / 8.4 (was 8.2 only).
+* Run PHPStan against PHP 8.2 / 8.3 / 8.4 with an explicit `--memory-limit=512M` so analysis no longer fails opaquely on memory exhaustion.
+* Add `concurrency` groups to all workflows so superseded pushes cancel in-flight runs.
+* `composer analyse` now mirrors CI's memory limit.
+
 ## v5.0.2 - 2026-04-30
 
 ### Fixed

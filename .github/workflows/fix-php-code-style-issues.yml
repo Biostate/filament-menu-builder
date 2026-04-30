@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   php-code-styling:
     runs-on: ubuntu-latest
@@ -18,8 +22,20 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@v3
+
       - name: Fix PHP code style issues
         uses: aglipanci/laravel-pint-action@2.4
+
+      - name: Verify PHPStan still passes after styling
+        run: ./vendor/bin/phpstan --error-format=github --memory-limit=512M --no-progress
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
