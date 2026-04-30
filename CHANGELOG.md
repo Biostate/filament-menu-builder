@@ -2,7 +2,7 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
-## Unreleased
+## v5.0.2 - 2026-04-30
 
 ### Fixed
 
@@ -11,6 +11,8 @@ All notable changes to `filament-menu-builder` will be documented in this file.
 ### Documentation
 
 * Document `getFilamentSearchLabel()` in the Menuable Trait guide and clarify how it relates to `getMenuNameAttribute()`.
+
+**Full Changelog**: https://github.com/Biostate/filament-menu-builder/compare/v5.0.1...v5.0.2
 
 ## v5.0.1 - 2026-02-13
 
