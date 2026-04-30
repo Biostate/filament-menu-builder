@@ -2,6 +2,7 @@
 
 namespace Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages;
 
+use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Biostate\FilamentMenuBuilder\Models\Menu;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -11,7 +12,7 @@ class EditMenu extends EditRecord
 {
     public static function getResource(): string
     {
-        return \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuResource();
+        return FilamentMenuBuilderPlugin::get()->getMenuResource();
     }
 
     protected function getActions(): array

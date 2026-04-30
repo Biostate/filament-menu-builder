@@ -40,6 +40,6 @@ trait Menuable
 
     public function getFilamentSearchOptionName()
     {
-        return $this->{$this->getFilamentSearchLabel()};
+        return $this->menu_name;
     }
 }

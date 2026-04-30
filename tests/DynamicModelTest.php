@@ -1,8 +1,12 @@
 <?php
 
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource;
 use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Biostate\FilamentMenuBuilder\Models\Menu;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
+use Filament\Facades\Filament;
+use Filament\Panel;
 
 class CustomMenu extends Menu {}
 class CustomMenuItem extends MenuItem {}
@@ -35,14 +39,14 @@ it('uses dynamic models in resources', function () {
     $plugin->usingMenuItemModel(CustomMenuItem::class);
 
     // Mock the plugin registration in Filament
-    $panel = \Filament\Facades\Filament::getCurrentPanel();
+    $panel = Filament::getCurrentPanel();
     if (! $panel) {
         // Setup a dummy panel if none exists
-        $panel = \Filament\Panel::make()->id('test-panel');
-        \Filament\Facades\Filament::setCurrentPanel($panel);
+        $panel = Panel::make()->id('test-panel');
+        Filament::setCurrentPanel($panel);
     }
     $panel->plugin($plugin);
 
-    expect(\Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource::getModel())->toBe(CustomMenu::class);
-    expect(\Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource::getModel())->toBe(CustomMenuItem::class);
+    expect(MenuResource::getModel())->toBe(CustomMenu::class);
+    expect(MenuItemResource::getModel())->toBe(CustomMenuItem::class);
 });

@@ -2,8 +2,10 @@
 
 namespace Biostate\FilamentMenuBuilder\Http\Livewire;
 
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
 use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
@@ -14,7 +16,7 @@ use Livewire\Component;
 /**
  * @property int $menuId
  * @property array|null $data
- * @property \Filament\Schemas\Schema $form
+ * @property Schema $form
  */
 class MenuItemForm extends Component implements HasSchemas
 {
@@ -43,7 +45,7 @@ class MenuItemForm extends Component implements HasSchemas
             throw new \RuntimeException('Filament Menu Builder plugin not registered');
         }
 
-        /** @var class-string<\Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource> $menuItemResource */
+        /** @var class-string<MenuItemResource> $menuItemResource */
         $menuItemResource = $plugin->getMenuItemResource();
 
         return $schema
@@ -52,7 +54,7 @@ class MenuItemForm extends Component implements HasSchemas
                     ->description(__('filament-menu-builder::menu-builder.create_new_menu_item'))
                     ->schema($menuItemResource::getFormSchemaArray())
                     ->footerActions([
-                        \Filament\Actions\Action::make('submit')
+                        Action::make('submit')
                             ->label(__('filament-menu-builder::menu-builder.create_menu_item'))
                             ->submit('submit'),
                     ]),

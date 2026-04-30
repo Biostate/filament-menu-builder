@@ -2,11 +2,15 @@
 
 namespace Biostate\FilamentMenuBuilder;
 
+use Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface;
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource;
+use Biostate\FilamentMenuBuilder\Models\Menu;
+use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
 
 class FilamentMenuBuilderPlugin implements Plugin
 {
@@ -14,9 +18,9 @@ class FilamentMenuBuilderPlugin implements Plugin
 
     protected string $menuItemResource = MenuItemResource::class;
 
-    protected string $menuModel = \Biostate\FilamentMenuBuilder\Models\Menu::class;
+    protected string $menuModel = Menu::class;
 
-    protected string $menuItemModel = \Biostate\FilamentMenuBuilder\Models\MenuItem::class;
+    protected string $menuItemModel = MenuItem::class;
 
     public function getId(): string
     {
@@ -80,7 +84,7 @@ class FilamentMenuBuilderPlugin implements Plugin
     }
 
     /**
-     * @return class-string<\Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface>
+     * @return class-string<MenuItemResourceInterface>
      */
     public function getMenuItemResource(): string
     {
@@ -93,8 +97,8 @@ class FilamentMenuBuilderPlugin implements Plugin
             throw new \InvalidArgumentException("Class {$menuModel} does not exist");
         }
 
-        if (! is_subclass_of($menuModel, \Illuminate\Database\Eloquent\Model::class)) {
-            throw new \InvalidArgumentException("Class {$menuModel} must extend " . \Illuminate\Database\Eloquent\Model::class);
+        if (! is_subclass_of($menuModel, Model::class)) {
+            throw new \InvalidArgumentException("Class {$menuModel} must extend " . Model::class);
         }
 
         $this->menuModel = $menuModel;
@@ -108,8 +112,8 @@ class FilamentMenuBuilderPlugin implements Plugin
             throw new \InvalidArgumentException("Class {$menuItemModel} does not exist");
         }
 
-        if (! is_subclass_of($menuItemModel, \Illuminate\Database\Eloquent\Model::class)) {
-            throw new \InvalidArgumentException("Class {$menuItemModel} must extend " . \Illuminate\Database\Eloquent\Model::class);
+        if (! is_subclass_of($menuItemModel, Model::class)) {
+            throw new \InvalidArgumentException("Class {$menuItemModel} must extend " . Model::class);
         }
 
         $this->menuItemModel = $menuItemModel;

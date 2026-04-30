@@ -6,6 +6,7 @@ use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
 use Biostate\FilamentMenuBuilder\Models\Menu;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Biostate\FilamentMenuBuilder\Tests\TestCase;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 
@@ -66,7 +67,7 @@ class MenuItemTest extends TestCase
             'menuable_id' => 1,
         ]);
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\MorphTo::class, $menuItem->menuable());
+        $this->assertInstanceOf(MorphTo::class, $menuItem->menuable());
     }
 
     public function test_get_menu_name_attribute_without_menuable(): void

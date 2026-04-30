@@ -43,6 +43,36 @@ class Product extends Model
 }
 ```
 
+## Customizing the Search Column
+
+When users search for a model in the menu item form, the trait builds a `LIKE` query against a real database column. By default that column is `name`. If your model uses a different column (for example `title`), override `getFilamentSearchLabel()`:
+
+```php
+use Biostate\FilamentMenuBuilder\Traits\Menuable;
+
+class Page extends Model
+{
+    use Menuable;
+
+    public function getMenuLinkAttribute(): string
+    {
+        return route('pages.show', $this);
+    }
+
+    public function getMenuNameAttribute(): string
+    {
+        return $this->title;
+    }
+
+    public static function getFilamentSearchLabel(): string
+    {
+        return 'title';
+    }
+}
+```
+
+`getFilamentSearchLabel()` must return the name of an actual database column — it is used in the `WHERE` clause of the search query. The display label shown in the select field comes from `getMenuNameAttribute()`, so the two methods are independent: use `getMenuNameAttribute()` to control how the option is rendered, and `getFilamentSearchLabel()` to control which column the search runs against.
+
 ## Registering Models in Config
 
 After adding the trait to your model, you need to register it in the config file. You can add multiple models:

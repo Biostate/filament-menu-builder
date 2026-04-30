@@ -3,6 +3,11 @@
 namespace Biostate\FilamentMenuBuilder\Filament\Resources;
 
 use BackedEnum;
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\CreateMenu;
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\EditMenu;
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\ListMenus;
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\MenuBuilder;
+use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Biostate\FilamentMenuBuilder\Models\Menu;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
@@ -15,7 +20,7 @@ class MenuResource extends Resource
 {
     public static function getModel(): string
     {
-        return \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuModel();
+        return FilamentMenuBuilderPlugin::get()->getMenuModel();
     }
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bars-3';
@@ -98,10 +103,10 @@ class MenuResource extends Resource
     {
 
         return [
-            'index' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\ListMenus::route('/'),
-            'create' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\CreateMenu::route('/create'),
-            'edit' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\EditMenu::route('/{record}/edit'),
-            'build' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages\MenuBuilder::route('/{record}/build'),
+            'index' => ListMenus::route('/'),
+            'create' => CreateMenu::route('/create'),
+            'edit' => EditMenu::route('/{record}/edit'),
+            'build' => MenuBuilder::route('/{record}/build'),
         ];
     }
 }
