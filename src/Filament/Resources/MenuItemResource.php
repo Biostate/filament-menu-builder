@@ -6,12 +6,17 @@ use BackedEnum;
 use Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemTarget;
 use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages\CreateMenuItem;
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages\EditMenuItem;
+use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages\ListMenuItems;
+use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Filament\Actions;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,7 +26,7 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
 {
     public static function getModel(): string
     {
-        return \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuItemModel();
+        return FilamentMenuBuilderPlugin::get()->getMenuItemModel();
     }
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bars-3';
@@ -89,7 +94,7 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
                 ->maxLength(255),
             Select::make('menu_id')
                 ->label(__('filament-menu-builder::menu-builder.menu_name'))
-                ->options(fn () => \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuModel()::all()->pluck('name', 'id'))
+                ->options(fn () => FilamentMenuBuilderPlugin::get()->getMenuModel()::all()->pluck('name', 'id'))
                 ->hidden(fn ($context) => ! in_array($context, ['edit', 'create']))
                 ->required(),
             Select::make('target')
@@ -103,7 +108,7 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
             TextInput::make('wrapper_class')
                 ->label(__('filament-menu-builder::menu-builder.form_labels.wrapper_class'))
                 ->maxLength(255),
-            \Filament\Schemas\Components\Fieldset::make('URL')
+            Fieldset::make('URL')
                 ->columns(1)
                 ->schema([
                     Select::make('type')
@@ -249,9 +254,9 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
     public static function getPages(): array
     {
         return [
-            'index' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages\ListMenuItems::route('/'),
-            'create' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages\CreateMenuItem::route('/create'),
-            'edit' => \Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages\EditMenuItem::route('/{record}/edit'),
+            'index' => ListMenuItems::route('/'),
+            'create' => CreateMenuItem::route('/create'),
+            'edit' => EditMenuItem::route('/{record}/edit'),
         ];
     }
 }

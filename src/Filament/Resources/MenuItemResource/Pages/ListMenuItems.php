@@ -2,6 +2,7 @@
 
 namespace Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource\Pages;
 
+use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -9,7 +10,7 @@ class ListMenuItems extends ListRecords
 {
     public static function getResource(): string
     {
-        return \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuItemResource();
+        return FilamentMenuBuilderPlugin::get()->getMenuItemResource();
     }
 
     protected function getActions(): array

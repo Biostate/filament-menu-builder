@@ -6,6 +6,7 @@ use Biostate\FilamentMenuBuilder\Models\Menu;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Biostate\FilamentMenuBuilder\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Sluggable\SlugOptions;
 
 class MenuTest extends TestCase
 {
@@ -54,7 +55,7 @@ class MenuTest extends TestCase
         $menu = new Menu;
         $slugOptions = $menu->getSlugOptions();
 
-        $this->assertInstanceOf(\Spatie\Sluggable\SlugOptions::class, $slugOptions);
+        $this->assertInstanceOf(SlugOptions::class, $slugOptions);
     }
 
     public function test_factory_creation(): void

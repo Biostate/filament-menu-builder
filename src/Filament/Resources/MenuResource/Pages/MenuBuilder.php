@@ -2,6 +2,7 @@
 
 namespace Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource\Pages;
 
+use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
@@ -12,7 +13,7 @@ class MenuBuilder extends Page
 
     public static function getResource(): string
     {
-        return \Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuResource();
+        return FilamentMenuBuilderPlugin::get()->getMenuResource();
     }
 
     public function getTitle(): string | Htmlable

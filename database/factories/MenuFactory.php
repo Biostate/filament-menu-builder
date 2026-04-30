@@ -6,7 +6,7 @@ use Biostate\FilamentMenuBuilder\Models\Menu;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Biostate\FilamentMenuBuilder\Models\Menu>
+ * @extends Factory<Menu>
  */
 class MenuFactory extends Factory
 {

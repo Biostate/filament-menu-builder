@@ -5,6 +5,9 @@ namespace Biostate\FilamentMenuBuilder\Tests\Traits;
 use Biostate\FilamentMenuBuilder\Tests\Models\TestModel;
 use Biostate\FilamentMenuBuilder\Tests\Models\TestModelWithTranslations;
 use Biostate\FilamentMenuBuilder\Tests\TestCase;
+use Biostate\FilamentMenuBuilder\Traits\Menuable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MenuableTest extends TestCase
@@ -16,9 +19,9 @@ class MenuableTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('You need to implement the menuLink method');
 
-        $model = new class extends \Illuminate\Database\Eloquent\Model
+        $model = new class extends Model
         {
-            use \Biostate\FilamentMenuBuilder\Traits\Menuable;
+            use Menuable;
         };
 
         $model->menu_link;
@@ -128,9 +131,9 @@ class MenuableTest extends TestCase
 
     public function test_get_filament_search_option_name_uses_menu_name_accessor(): void
     {
-        $model = new class(['name' => 'ignored']) extends \Illuminate\Database\Eloquent\Model
+        $model = new class(['name' => 'ignored']) extends Model
         {
-            use \Biostate\FilamentMenuBuilder\Traits\Menuable;
+            use Menuable;
 
             protected $fillable = ['name'];
 
@@ -167,7 +170,7 @@ class MenuableTest extends TestCase
     {
         $query = TestModel::filamentSearch('test');
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Builder::class, $query);
+        $this->assertInstanceOf(Builder::class, $query);
     }
 
     public function test_filament_search_with_empty_search_term(): void

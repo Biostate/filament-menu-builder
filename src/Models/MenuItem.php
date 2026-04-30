@@ -3,10 +3,12 @@
 namespace Biostate\FilamentMenuBuilder\Models;
 
 use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
+use Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Routing\Exceptions\UrlGenerationException;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -28,7 +30,7 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property-read string $menu_name
  * @property-read string $normalized_type
  * @property-read string $link
- * @property-read \Illuminate\Database\Eloquent\Model|null $menuable
+ * @property-read Model|null $menuable
  * @property-read bool $is_route_resolved
  * @property-read bool $is_url_resolved
  * @property-read bool $is_link_resolved
@@ -80,7 +82,7 @@ class MenuItem extends Model
 
     public function menu(): BelongsTo
     {
-        return $this->belongsTo(\Biostate\FilamentMenuBuilder\FilamentMenuBuilderPlugin::get()->getMenuModel());
+        return $this->belongsTo(FilamentMenuBuilderPlugin::get()->getMenuModel());
     }
 
     public function getMenuNameAttribute($value): string
@@ -157,7 +159,7 @@ class MenuItem extends Model
             $this->resolveRoute();
 
             return [];
-        } catch (\Illuminate\Routing\Exceptions\UrlGenerationException $e) {
+        } catch (UrlGenerationException $e) {
             return $this->extractMissingParameters();
         } catch (\Exception $e) {
             return [];
@@ -207,7 +209,7 @@ class MenuItem extends Model
             $this->resolveRoute();
 
             return null;
-        } catch (\Illuminate\Routing\Exceptions\UrlGenerationException $e) {
+        } catch (UrlGenerationException $e) {
             $missingParams = $this->extractMissingParameters();
             if (! empty($missingParams)) {
                 return 'Missing route parameters: ' . implode(', ', $missingParams);

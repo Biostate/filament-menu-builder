@@ -3,11 +3,12 @@
 namespace Biostate\FilamentMenuBuilder\Database\Factories;
 
 use Biostate\FilamentMenuBuilder\Enums\MenuItemType;
+use Biostate\FilamentMenuBuilder\Models\Menu;
 use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Biostate\FilamentMenuBuilder\Models\MenuItem>
+ * @extends Factory<MenuItem>
  */
 class MenuItemFactory extends Factory
 {
@@ -33,7 +34,7 @@ class MenuItemFactory extends Factory
             'menuable_id' => null,
             'menuable_type' => null,
             'use_menuable_name' => false,
-            'menu_id' => \Biostate\FilamentMenuBuilder\Models\Menu::factory(),
+            'menu_id' => Menu::factory(),
         ];
     }
 

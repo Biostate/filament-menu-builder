@@ -13,14 +13,16 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Grid;
 use Filament\Support\Enums\Size;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Kalnoy\Nestedset\QueryBuilder;
 use Livewire\Component;
 
 /**
  * @property int $menuId
  * @property array $data
- * @property \Illuminate\Database\Eloquent\Model $menuItem
- * @property \Illuminate\Database\Eloquent\Model $newMenuItem
+ * @property Model $menuItem
+ * @property Model $newMenuItem
  */
 class MenuBuilder extends Component implements HasActions, HasForms
 {
@@ -244,7 +246,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
 
     public function items(): Collection
     {
-        /** @var \Kalnoy\Nestedset\QueryBuilder $query */
+        /** @var QueryBuilder $query */
         $query = MenuItem::query()
             ->where('menu_id', $this->menuId)
             ->with('menuable');
