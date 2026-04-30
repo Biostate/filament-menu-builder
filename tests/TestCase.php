@@ -74,6 +74,9 @@ class TestCase extends Orchestra
         // Run test migrations
         $migration = include __DIR__ . '/migrations/create_test_models_table.php';
         $migration->up();
+
+        $migration = include __DIR__ . '/migrations/create_nameless_menuables_table.php';
+        $migration->up();
     }
 
     protected function defineRoutes($router)
