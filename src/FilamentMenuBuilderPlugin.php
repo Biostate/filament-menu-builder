@@ -2,6 +2,7 @@
 
 namespace Biostate\FilamentMenuBuilder;
 
+use Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface;
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuItemResource;
 use Biostate\FilamentMenuBuilder\Filament\Resources\MenuResource;
 use Biostate\FilamentMenuBuilder\Models\Menu;
@@ -83,7 +84,7 @@ class FilamentMenuBuilderPlugin implements Plugin
     }
 
     /**
-     * @return class-string<MenuItemResourceInterface>
+     * @return class-string<\Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface>
      */
     public function getMenuItemResource(): string
     {
