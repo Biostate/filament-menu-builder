@@ -5,6 +5,7 @@
         "concat_space": {
             "spacing": "one"
         },
+        "fully_qualified_strict_types": false,
         "method_argument_space": true,
         "single_trait_insert_per_statement": true,
         "types_spaces": {
