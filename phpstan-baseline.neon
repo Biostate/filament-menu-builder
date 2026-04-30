@@ -1,0 +1,6 @@
+# PHPStan baseline file.
+#
+# Errors listed here are temporarily ignored. Add entries with:
+#   ./vendor/bin/phpstan analyse --generate-baseline
+# and remove them by fixing the underlying code. Currently empty —
+# the suite runs cleanly at level 4 without exceptions.

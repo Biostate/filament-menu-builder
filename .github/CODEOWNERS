@@ -1,0 +1,5 @@
+# Default reviewers for any change.
+#
+# Replace `@Biostate` with a more specific GitHub team or user handle once
+# one is configured (e.g. `@Biostate/filament-menu-builder-maintainers`).
+* @Biostate
