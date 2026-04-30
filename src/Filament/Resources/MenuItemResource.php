@@ -219,11 +219,11 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
                     Select::make('menuable_id')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.menuable_id'))
                         ->searchable()
-                        ->options(fn ($get) => $get('menuable_type')::all()->pluck($get('menuable_type')::getFilamentSearchLabel(), 'id'))
+                        ->options(fn ($get) => $get('menuable_type')::all()->mapWithKeys(fn ($model) => [$model->getKey() => $model->getFilamentSearchOptionName()]))
                         ->getSearchResultsUsing(function (string $search, callable $get) {
                             $className = $get('menuable_type');
 
-                            return $className::filamentSearch($search)->pluck($className::getFilamentSearchLabel(), 'id');
+                            return $className::filamentSearch($search)->get()->mapWithKeys(fn ($model) => [$model->getKey() => $model->getFilamentSearchOptionName()]);
                         })
                         ->required(fn ($get) => $get('menuable_type') != null)
                         ->getOptionLabelUsing(fn ($value, $get): ?string => $get('menuable_type')::find($value)?->getFilamentSearchOptionName())

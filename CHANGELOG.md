@@ -2,6 +2,16 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+* Fix null label error in the menuable Select when a model has no `name` column but defines `getMenuNameAttribute()`. The Select options pipeline now uses the `menu_name` accessor for display, while `getFilamentSearchLabel()` remains the database column used for searching. (#23)
+
+### Documentation
+
+* Document `getFilamentSearchLabel()` in the Menuable Trait guide and clarify how it relates to `getMenuNameAttribute()`.
+
 ## v5.0.1 - 2026-02-13
 
 **Full Changelog**: https://github.com/Biostate/filament-menu-builder/compare/v5.0.0...v5.0.1

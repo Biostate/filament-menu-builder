@@ -123,7 +123,24 @@ class MenuableTest extends TestCase
     {
         $model = new TestModel(['name' => null]);
 
-        $this->assertNull($model->getFilamentSearchOptionName());
+        $this->assertSame('', $model->getFilamentSearchOptionName());
+    }
+
+    public function test_get_filament_search_option_name_uses_menu_name_accessor(): void
+    {
+        $model = new class(['name' => 'ignored']) extends \Illuminate\Database\Eloquent\Model
+        {
+            use \Biostate\FilamentMenuBuilder\Traits\Menuable;
+
+            protected $fillable = ['name'];
+
+            public function getMenuNameAttribute(): string
+            {
+                return 'From Accessor';
+            }
+        };
+
+        $this->assertSame('From Accessor', $model->getFilamentSearchOptionName());
     }
 
     public function test_menuable_trait_can_be_used_on_different_models(): void
