@@ -84,7 +84,7 @@ class FilamentMenuBuilderPlugin implements Plugin
     }
 
     /**
-     * @return class-string<\Biostate\FilamentMenuBuilder\Contracts\MenuItemResourceInterface>
+     * @return class-string<MenuItemResourceInterface>
      */
     public function getMenuItemResource(): string
     {
