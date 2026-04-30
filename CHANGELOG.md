@@ -4,9 +4,17 @@ All notable changes to `filament-menu-builder` will be documented in this file.
 
 ## Unreleased
 
+### Changed
+
+* The default `Menuable::getMenuNameAttribute()` now returns `(string) ($this->name ?? '')` instead of `$this->name`. Previously, models that did not have a `name` column (or had a null `name` value) raised a `TypeError` when something accessed `$model->menu_name`, because the method declares `: string` return type. The new default coalesces to an empty string, which is strictly safer.
+
 ### Tests
 
 * Add regression coverage for issue #23: a `NamelessMenuable` test fixture that mirrors the exact bug shape (no `name` column, display name computed via `getMenuNameAttribute()`), plus tests that exercise the `MenuItemResource` Select options pipeline. Reverting the v5.0.2 trait fix now causes these tests to fail with `[null, null]` instead of model labels.
+
+### Documentation
+
+* Add an "Upgrading" section to the Menuable Trait guide documenting (a) the v5.0.2 behavioral change to `getFilamentSearchOptionName()` and (b) the v5.0.4 null-safe default for `getMenuNameAttribute()`.
 
 ## v5.0.3 - 2026-04-30
 
