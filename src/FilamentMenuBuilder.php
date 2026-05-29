@@ -2,6 +2,4 @@
 
 namespace Biostate\FilamentMenuBuilder;
 
-class FilamentMenuBuilder
-{
-}
+class FilamentMenuBuilder {}
