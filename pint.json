@@ -6,6 +6,7 @@
             "spacing": "one"
         },
         "fully_qualified_strict_types": false,
+        "lowercase_static_reference": false,
         "method_argument_space": true,
         "single_trait_insert_per_statement": true,
         "types_spaces": {

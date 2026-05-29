@@ -59,7 +59,9 @@ class FilamentMenuBuilderServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void {}
+    public function packageRegistered(): void
+    {
+    }
 
     public function bootingPackage(): void
     {

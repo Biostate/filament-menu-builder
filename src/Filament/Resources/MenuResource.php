@@ -101,7 +101,6 @@ class MenuResource extends Resource
 
     public static function getPages(): array
     {
-
         return [
             'index' => ListMenus::route('/'),
             'create' => CreateMenu::route('/create'),

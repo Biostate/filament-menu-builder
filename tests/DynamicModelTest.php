@@ -8,8 +8,12 @@ use Biostate\FilamentMenuBuilder\Models\MenuItem;
 use Filament\Facades\Filament;
 use Filament\Panel;
 
-class CustomMenu extends Menu {}
-class CustomMenuItem extends MenuItem {}
+class CustomMenu extends Menu
+{
+}
+class CustomMenuItem extends MenuItem
+{
+}
 
 it('can configure dynamic models', function () {
     $plugin = FilamentMenuBuilderPlugin::make();
