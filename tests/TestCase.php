@@ -18,7 +18,6 @@ use Illuminate\Testing\TestResponse;
 use Kalnoy\Nestedset\NestedSetServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -41,7 +40,6 @@ class TestCase extends Orchestra
         return [
             TestPanelProvider::class,
             ActionsServiceProvider::class,
-            BladeCaptureDirectiveServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
             BladeIconsServiceProvider::class,
             FilamentServiceProvider::class,
