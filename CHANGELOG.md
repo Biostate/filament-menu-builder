@@ -2,6 +2,27 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## v5.1.0 - 2026-05-29
+
+### Added
+
+* Laravel 13 support. The `kalnoy/nestedset` constraint is widened to `^6.0|^7.0` (v7 requires `illuminate/* >=13.0`), resolving the install conflict reported in #31. Existing Laravel 11/12 installs are unaffected — Composer keeps selecting nestedset v6 there.
+
+### CI
+
+* Test against Laravel 11, 12 and 13 (was Laravel 11 only). PHP 8.2 is excluded from the Laravel 13 entries, which require PHP >= 8.3.
+* Widen dev-dependency constraints so the test toolchain resolves on every matrix combination: Pest `^2|^3|^4`, `pest-plugin-arch`/`pest-plugin-laravel` `^2|^3|^4`, larastan `^2.0.1|^3.0`, testbench `^9.14|^10.0|^11.0`, and the PHPStan rule packages `^1.0|^2.0`.
+* Install the `pcov` coverage driver in CI so the `failOnWarning` PHPUnit config does not fail under the Pest 4 toolchain on a missing driver. Stop fail-fast so one failing matrix combo no longer cancels the rest.
+* Run the PHPStan and styling workflows on pull requests (and on `composer.json` / `phpstan-baseline.neon` changes), so dependency and baseline updates are validated before merge.
+
+### Changed
+
+* Drop the manual `BladeCaptureDirectiveServiceProvider` registration in the test suite; Filament v5 no longer depends on `ryanchandler/blade-capture-directive`, so the class is absent under some Laravel 13 resolutions.
+* Disable Pint's `lowercase_static_reference` rule, which incorrectly rewrote the `MenuItemTarget::Self` enum case to a reserved-word identifier.
+* Regenerate the PHPStan baseline for the larastan 3 / PHPStan 2 toolchain.
+
+**Full Changelog**: https://github.com/Biostate/filament-menu-builder/compare/v5.0.4...v5.1.0
+
 ## v5.0.4 - 2026-04-30
 
 ### Changed
