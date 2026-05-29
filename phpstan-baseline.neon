@@ -25,6 +25,18 @@ parameters:
 			path: src/Enums/MenuItemType.php
 
 		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$menu_link\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/MenuItem.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$menu_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/MenuItem.php
+
+		-
 			message: '#^Using nullsafe property access "\?\-\>menu_link" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
 			count: 1
