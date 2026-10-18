@@ -70,4 +70,5 @@ return [
 
     'component_copy_message' => 'Đã sao chép Blade Component! Chỉ cần dán vào file blade của bạn.',
     'regerate_slug' => 'Tạo lại slug',
+    'invalid_url_scheme' => 'URL không được sử dụng giao thức javascript:, data: hoặc vbscript:.',
 ];

@@ -126,6 +126,10 @@ class MenuItem extends Model
 
     public function getIsUrlResolvedAttribute(): bool
     {
+        if (! static::isSafeUrl($this->url)) {
+            return false;
+        }
+
         try {
             $this->resolveUrl();
 
@@ -194,6 +198,10 @@ class MenuItem extends Model
 
     private function getUrlError(): ?string
     {
+        if (! static::isSafeUrl($this->url)) {
+            return 'Invalid URL: unsupported scheme';
+        }
+
         try {
             $this->resolveUrl();
 
@@ -246,10 +254,26 @@ class MenuItem extends Model
             return url('/');
         }
 
-        if ($this->url === '#') {
+        if ($this->url === '#' || ! static::isSafeUrl($this->url)) {
             return '#';
         }
 
         return Str::startsWith($this->url, 'http') ? $this->url : url($this->url);
+    }
+
+    /**
+     * Reject script-capable schemes (javascript:, data:, vbscript:) so a stored
+     * URL cannot execute in the browser when rendered as a link. Browsers ignore
+     * whitespace and control characters inside the scheme, so strip them first.
+     */
+    public static function isSafeUrl(?string $url): bool
+    {
+        if ($url === null || $url === '') {
+            return true;
+        }
+
+        $normalized = strtolower(preg_replace('/[\x00-\x20]+/', '', html_entity_decode($url, ENT_QUOTES | ENT_HTML5)));
+
+        return ! Str::startsWith($normalized, ['javascript:', 'data:', 'vbscript:']);
     }
 }

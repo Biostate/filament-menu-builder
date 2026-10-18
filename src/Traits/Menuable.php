@@ -27,9 +27,12 @@ trait Menuable
 
         if ($hasTranslations) {
             $locale = $locale ?? app()->getLocale();
+            $column = $query->getQuery()->getGrammar()->wrap($this->getFilamentSearchLabel());
+            $path = '$."' . addcslashes((string) $locale, '"\\') . '"';
+
             $query->whereRaw(
-                'LOWER(json_unquote(JSON_EXTRACT(`' . $this->getFilamentSearchLabel() . "`, '$.\"$locale\"'))) like LOWER(?)",
-                ["%{$search}%"]
+                'LOWER(json_unquote(JSON_EXTRACT(' . $column . ', ?))) like LOWER(?)',
+                [$path, "%{$search}%"]
             );
         } else {
             $query->where($this->getFilamentSearchLabel(), 'like', "%{$search}%");

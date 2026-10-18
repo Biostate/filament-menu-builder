@@ -70,4 +70,5 @@ return [
 
     'component_copy_message' => 'Blade Component Copied! Just paste it in your blade file.',
     'regerate_slug' => 'Regenerate Slug',
+    'invalid_url_scheme' => 'The URL must not use the javascript:, data: or vbscript: scheme.',
 ];

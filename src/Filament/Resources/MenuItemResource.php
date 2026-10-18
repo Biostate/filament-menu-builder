@@ -127,6 +127,11 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
                         ->label(__('filament-menu-builder::menu-builder.form_labels.url'))
                         ->hidden(fn ($get) => $get('type')?->value != 'link')
                         ->maxLength(255)
+                        ->rule(fn () => function (string $attribute, mixed $value, \Closure $fail): void {
+                            if (is_string($value) && ! FilamentMenuBuilderPlugin::get()->getMenuItemModel()::isSafeUrl($value)) {
+                                $fail(__('filament-menu-builder::menu-builder.invalid_url_scheme'));
+                            }
+                        })
                         ->required(fn ($get) => $get('type')?->value == 'link'),
                     // ROUTE
                     Select::make('route')
@@ -224,14 +229,14 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
                     Select::make('menuable_id')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.menuable_id'))
                         ->searchable()
-                        ->options(fn ($get) => $get('menuable_type')::all()->mapWithKeys(fn ($model) => [$model->getKey() => $model->getFilamentSearchOptionName()]))
+                        ->options(fn ($get) => static::resolveMenuableClass($get('menuable_type'))::all()->mapWithKeys(fn ($model) => [$model->getKey() => $model->getFilamentSearchOptionName()]))
                         ->getSearchResultsUsing(function (string $search, callable $get) {
-                            $className = $get('menuable_type');
+                            $className = static::resolveMenuableClass($get('menuable_type'));
 
                             return $className::filamentSearch($search)->get()->mapWithKeys(fn ($model) => [$model->getKey() => $model->getFilamentSearchOptionName()]);
                         })
                         ->required(fn ($get) => $get('menuable_type') != null)
-                        ->getOptionLabelUsing(fn ($value, $get): ?string => $get('menuable_type')::find($value)?->getFilamentSearchOptionName())
+                        ->getOptionLabelUsing(fn ($value, $get): ?string => static::resolveMenuableClass($get('menuable_type'))::find($value)?->getFilamentSearchOptionName())
                         ->hidden(fn ($get) => $get('menuable_type') == null),
                     Toggle::make('use_menuable_name')
                         ->label(__('filament-menu-builder::menu-builder.form_labels.use_menuable_name'))
@@ -244,6 +249,21 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
                     'parameters' => implode(', ', config('filament-menu-builder.usable_parameters', [])),
                 ])),
         ];
+    }
+
+    /**
+     * `menuable_type` comes from client state, so only classes registered in
+     * the `models` config may be used to query records.
+     *
+     * @return class-string<\Illuminate\Database\Eloquent\Model>
+     */
+    public static function resolveMenuableClass(mixed $className): string
+    {
+        if (! is_string($className) || ! in_array($className, config('filament-menu-builder.models', []), true)) {
+            throw new \InvalidArgumentException('Invalid menuable type');
+        }
+
+        return $className;
     }
 
     public static function getFormSchemaArray(): array

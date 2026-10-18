@@ -2,6 +2,18 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
+## Unreleased
+
+### Security
+
+* Menu builder actions (edit, delete, duplicate, create sub-item) now only resolve menu items that belong to the menu being edited; previously a crafted `menuItemId` could modify or delete items of any menu.
+* `menuId` on the `menu-builder` and `menu-item-form` Livewire components is now `#[Locked]`, and both components (and the "Configure Menu" page) check the menu resource's `canEdit` policy on every request.
+* Saving the menu tree only accepts `id`/`children` for items of the current menu. Previously the payload was passed straight to `rebuildTree()`, which mass-assigns extra keys and creates new items for entries without an `id`.
+* The "create menu item" form saves validated form state instead of the raw Livewire `data` property, so extra attributes (e.g. `id`) can no longer be injected.
+* Link URLs using the `javascript:`, `data:` or `vbscript:` scheme are rejected by the form and rendered as `#`, preventing stored XSS in front-end menus and the admin "Go to link" action.
+* `Menuable::scopeFilamentSearch()` binds the translation locale as a query parameter instead of interpolating it into raw SQL.
+* The menuable record select only queries classes registered in the `models` config instead of any class name sent by the client.
+
 ## v5.1.0 - 2026-05-29
 
 ### Added
