@@ -255,7 +255,7 @@ class MenuItemResource extends Resource implements MenuItemResourceInterface
      * `menuable_type` comes from client state, so only classes registered in
      * the `models` config may be used to query records.
      *
-     * @return class-string<\Illuminate\Database\Eloquent\Model>
+     * @return class-string
      */
     public static function resolveMenuableClass(mixed $className): string
     {

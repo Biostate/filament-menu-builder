@@ -12,8 +12,8 @@ use Biostate\FilamentMenuBuilder\Tests\Models\TestModel;
 use Biostate\FilamentMenuBuilder\Tests\Models\TestModelWithTranslations;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
-use Livewire\Livewire;
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Locked;
 
 class SecurityTest extends TestCase
 {
@@ -57,6 +57,27 @@ class SecurityTest extends TestCase
         }
     }
 
+    /**
+     * The components are driven directly rather than through `Livewire::test()`
+     * so the tests also run against the lowest supported Livewire release,
+     * whose test harness cannot render components under Testbench.
+     */
+    private function menuBuilder(Menu $menu): MenuBuilder
+    {
+        $component = new MenuBuilder;
+        $component->mount($menu->id);
+
+        return $component;
+    }
+
+    private function menuItemForm(Menu $menu): MenuItemForm
+    {
+        $component = new MenuItemForm;
+        $component->mount($menu->id);
+
+        return $component;
+    }
+
     public function test_save_rejects_items_from_another_menu(): void
     {
         $menu = Menu::factory()->create(['name' => 'Main']);
@@ -64,22 +85,24 @@ class SecurityTest extends TestCase
         $own = $this->makeItem($menu);
         $foreign = $this->makeItem($other, 'Foreign');
 
+        $component = $this->menuBuilder($menu);
+        $component->data = [['id' => $own->id, 'children' => [['id' => $foreign->id, 'children' => []]]]];
+
         $this->expectException(\InvalidArgumentException::class);
 
-        Livewire::test(MenuBuilder::class, ['menuId' => $menu->id])
-            ->set('data', [['id' => $own->id, 'children' => [['id' => $foreign->id, 'children' => []]]]])
-            ->call('save');
+        $component->save();
     }
 
     public function test_save_rejects_items_without_id(): void
     {
         $menu = Menu::factory()->create(['name' => 'Main']);
 
+        $component = $this->menuBuilder($menu);
+        $component->data = [['name' => 'Injected', 'type' => 'link', 'children' => []]];
+
         $this->expectException(\InvalidArgumentException::class);
 
-        Livewire::test(MenuBuilder::class, ['menuId' => $menu->id])
-            ->set('data', [['name' => 'Injected', 'type' => 'link', 'children' => []]])
-            ->call('save');
+        $component->save();
     }
 
     public function test_save_ignores_extra_attributes(): void
@@ -89,15 +112,15 @@ class SecurityTest extends TestCase
         $parent = $this->makeItem($menu, 'Parent');
         $child = $this->makeItem($menu, 'Child');
 
-        Livewire::test(MenuBuilder::class, ['menuId' => $menu->id])
-            ->set('data', [[
-                'id' => $parent->id,
-                'name' => 'Hacked',
-                'menu_id' => $other->id,
-                'url' => 'javascript:alert(1)',
-                'children' => [['id' => $child->id, 'children' => []]],
-            ]])
-            ->call('save');
+        $component = $this->menuBuilder($menu);
+        $component->data = [[
+            'id' => $parent->id,
+            'name' => 'Hacked',
+            'menu_id' => $other->id,
+            'url' => 'javascript:alert(1)',
+            'children' => [['id' => $child->id, 'children' => []]],
+        ]];
+        $component->save();
 
         $parent->refresh();
         $child->refresh();
@@ -110,13 +133,11 @@ class SecurityTest extends TestCase
 
     public function test_menu_id_is_locked(): void
     {
-        $menu = Menu::factory()->create(['name' => 'Main']);
-        $other = Menu::factory()->create(['name' => 'Other']);
+        foreach ([MenuBuilder::class, MenuItemForm::class] as $component) {
+            $attributes = (new \ReflectionProperty($component, 'menuId'))->getAttributes(Locked::class);
 
-        $this->expectException(CannotUpdateLockedPropertyException::class);
-
-        Livewire::test(MenuBuilder::class, ['menuId' => $menu->id])
-            ->set('menuId', $other->id);
+            $this->assertCount(1, $attributes, $component);
+        }
     }
 
     public function test_actions_cannot_target_items_of_another_menu(): void
@@ -125,34 +146,44 @@ class SecurityTest extends TestCase
         $other = Menu::factory()->create(['name' => 'Other']);
         $foreign = $this->makeItem($other, 'Foreign');
 
-        try {
-            Livewire::test(MenuBuilder::class, ['menuId' => $menu->id])
-                ->callAction('delete', arguments: ['menuItemId' => $foreign->id]);
-        } catch (\RuntimeException $e) {
-            $this->assertStringContainsString('not found', $e->getMessage());
+        $component = $this->menuBuilder($menu);
+
+        foreach (['deleteAction', 'editAction', 'duplicateAction', 'createSubItemAction'] as $method) {
+            $action = $component->{$method}()
+                ->livewire($component)
+                ->arguments(['menuItemId' => $foreign->id]);
+
+            try {
+                $action->call(['data' => ['name' => 'Hacked']]);
+                $this->fail("{$method} accepted an item from another menu");
+            } catch (\RuntimeException $e) {
+                $this->assertStringContainsString('not found', $e->getMessage(), $method);
+            }
         }
 
-        $this->assertNotNull(MenuItem::find($foreign->id));
+        $foreign->refresh();
+
+        $this->assertSame('Foreign', $foreign->name);
+        $this->assertSame(1, MenuItem::query()->count());
     }
 
     public function test_menu_item_form_ignores_injected_attributes(): void
     {
         $menu = Menu::factory()->create(['name' => 'Main']);
-        $other = Menu::factory()->create(['name' => 'Other']);
-        $existing = $this->makeItem($other, 'Existing');
 
-        Livewire::test(MenuItemForm::class, ['menuId' => $menu->id])
-            ->set('data.name', 'New')
-            ->set('data.type', 'link')
-            ->set('data.url', '/new')
-            ->set('data.target', '_self')
-            ->set('data.id', $existing->id + 100)
-            ->set('data.wrapper_class', 'ok')
-            ->call('submit');
+        $component = $this->menuItemForm($menu);
+        $component->data = array_merge($component->data, [
+            'name' => 'New',
+            'type' => MenuItemType::Link,
+            'url' => '/new',
+            'target' => '_self',
+            'id' => 999,
+        ]);
+        $component->submit();
 
         $item = MenuItem::query()->where('name', 'New')->sole();
 
-        $this->assertNotSame($existing->id + 100, $item->id);
+        $this->assertNotSame(999, $item->id);
         $this->assertSame($menu->id, $item->menu_id);
     }
 
@@ -160,13 +191,20 @@ class SecurityTest extends TestCase
     {
         $menu = Menu::factory()->create(['name' => 'Main']);
 
-        Livewire::test(MenuItemForm::class, ['menuId' => $menu->id])
-            ->set('data.name', 'Evil')
-            ->set('data.type', 'link')
-            ->set('data.url', 'javascript:alert(document.cookie)')
-            ->set('data.target', '_self')
-            ->call('submit')
-            ->assertHasErrors(['data.url']);
+        $component = $this->menuItemForm($menu);
+        $component->data = array_merge($component->data, [
+            'name' => 'Evil',
+            'type' => MenuItemType::Link,
+            'url' => 'javascript:alert(document.cookie)',
+            'target' => '_self',
+        ]);
+
+        try {
+            $component->submit();
+            $this->fail('A javascript: URL was accepted');
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('data.url', $e->errors());
+        }
 
         $this->assertSame(0, MenuItem::query()->count());
     }
