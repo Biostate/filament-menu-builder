@@ -70,4 +70,5 @@ return [
 
     'component_copy_message' => 'Composant Blade copié ! Collez-le simplement dans votre fichier Blade.',
     'regerate_slug' => 'Régénérer le slug',
+    'invalid_url_scheme' => 'L\'URL ne doit pas utiliser les schémas javascript:, data: ou vbscript:.',
 ];

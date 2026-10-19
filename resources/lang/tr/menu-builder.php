@@ -58,4 +58,5 @@ return [
 
     'component_copy_message' => 'Blade Bileşeni Kopyalandı! Sadece blade dosyanıza yapıştırın!',
     'regerate_slug' => 'Slug Yenile',
+    'invalid_url_scheme' => 'URL javascript:, data: veya vbscript: şemasını kullanamaz.',
 ];

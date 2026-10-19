@@ -30,6 +30,8 @@ class MenuBuilder extends Page
     {
         $this->record = $this->resolveRecord($record);
 
+        abort_unless(static::getResource()::canEdit($this->record), 403);
+
         $this->heading = $this->getTitle();
     }
 

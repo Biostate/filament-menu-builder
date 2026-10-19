@@ -16,6 +16,7 @@ use Filament\Support\Enums\Size;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Kalnoy\Nestedset\QueryBuilder;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 /**
@@ -29,6 +30,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
     use InteractsWithActions;
     use InteractsWithForms;
 
+    #[Locked]
     public int $menuId;
 
     public array $data = [];
@@ -40,6 +42,38 @@ class MenuBuilder extends Component implements HasActions, HasForms
     public function mount(int $menuId): void
     {
         $this->menuId = $menuId;
+
+        $this->authorizeAccess();
+    }
+
+    public function hydrate(): void
+    {
+        $this->authorizeAccess();
+    }
+
+    protected function authorizeAccess(): void
+    {
+        $plugin = FilamentMenuBuilderPlugin::get();
+        $menu = $plugin->getMenuModel()::query()->findOrFail($this->menuId);
+
+        abort_unless($plugin->getMenuResource()::canEdit($menu), 403);
+    }
+
+    /**
+     * Resolve a menu item by ID, scoped to the menu this component manages so
+     * client-supplied action arguments cannot reach items of other menus.
+     */
+    protected function findMenuItem(mixed $menuItemId): MenuItem
+    {
+        $menuItem = MenuItem::query()
+            ->where('menu_id', $this->menuId)
+            ->find($menuItemId);
+
+        if (! $menuItem instanceof MenuItem) {
+            throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
+        }
+
+        return $menuItem;
     }
 
     public function deleteAction(): Action
@@ -58,10 +92,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->action(function (array $arguments) {
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
 
-                $menuItem = MenuItem::find($menuItemId);
-                if (! $menuItem) {
-                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
-                }
+                $menuItem = $this->findMenuItem($menuItemId);
 
                 MenuItem::descendantsOf($menuItem->id)->each(function (MenuItem $descendant) {
                     $descendant->delete();
@@ -95,11 +126,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->iconButton()
             ->fillForm(function (array $arguments) {
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
-                $menuItem = MenuItem::find($menuItemId);
-
-                if (! $menuItem) {
-                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
-                }
+                $menuItem = $this->findMenuItem($menuItemId);
 
                 return $menuItem->toArray();
             })
@@ -110,10 +137,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->action(function (array $arguments, $data) {
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
 
-                $menuItem = MenuItem::find($menuItemId);
-                if (! $menuItem) {
-                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
-                }
+                $menuItem = $this->findMenuItem($menuItemId);
 
                 $temp = $data['route_parameters'] ?? [];
                 $data['route_parameters'] = [];
@@ -155,10 +179,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
             ->action(function (array $arguments, $data) {
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
 
-                $parent = MenuItem::find($menuItemId);
-                if (! $parent) {
-                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
-                }
+                $parent = $this->findMenuItem($menuItemId);
 
                 $menuItem = MenuItem::create([
                     ...$data,
@@ -215,10 +236,7 @@ class MenuBuilder extends Component implements HasActions, HasForms
                 $menuItemId = $arguments['menuItemId'] ?? throw new \InvalidArgumentException('menuItemId is required');
                 $isEdit = isset($arguments['edit']);
 
-                $menuItem = MenuItem::find($menuItemId);
-                if (! $menuItem) {
-                    throw new \RuntimeException("Menu item with ID {$menuItemId} not found");
-                }
+                $menuItem = $this->findMenuItem($menuItemId);
 
                 /** @var MenuItem $newMenuItem */
                 $newMenuItem = $menuItem->replicate();
@@ -263,11 +281,54 @@ class MenuBuilder extends Component implements HasActions, HasForms
             return;
         }
 
-        MenuItem::rebuildTree($this->data);
+        $ids = [];
+        $tree = $this->sanitizeTree($this->data, $ids);
+
+        $allowedIds = MenuItem::query()
+            ->where('menu_id', $this->menuId)
+            ->whereIn('id', $ids)
+            ->count();
+
+        if (count($ids) !== count(array_unique($ids)) || $allowedIds !== count($ids)) {
+            throw new \InvalidArgumentException('Menu tree contains items that do not belong to this menu');
+        }
+
+        MenuItem::rebuildTree($tree);
 
         Notification::make()
             ->title(__('filament-menu-builder::menu-builder.menu_saved'))
             ->success()
             ->send();
+    }
+
+    /**
+     * Reduce the client-supplied tree to `id` and `children` only. `rebuildTree()`
+     * mass-assigns every other key and creates new nodes for entries without an
+     * `id`, so nothing else may reach it.
+     *
+     * @param  array<int, int>  $ids
+     */
+    protected function sanitizeTree(array $items, array &$ids): array
+    {
+        $tree = [];
+
+        foreach ($items as $item) {
+            $id = is_array($item) ? filter_var($item['id'] ?? null, FILTER_VALIDATE_INT) : false;
+
+            if ($id === false) {
+                throw new \InvalidArgumentException('Menu tree contains an invalid item');
+            }
+
+            $ids[] = $id;
+
+            $children = $item['children'] ?? [];
+
+            $tree[] = [
+                'id' => $id,
+                'children' => is_array($children) ? $this->sanitizeTree($children, $ids) : [],
+            ];
+        }
+
+        return $tree;
     }
 }

@@ -11,6 +11,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 /**
@@ -22,6 +23,7 @@ class MenuItemForm extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
 
+    #[Locked]
     public int $menuId;
 
     public ?array $data = [];
@@ -29,7 +31,23 @@ class MenuItemForm extends Component implements HasSchemas
     public function mount(int $menuId): void
     {
         $this->menuId = $menuId;
+
+        $this->authorizeAccess();
+
         $this->form->fill();
+    }
+
+    public function hydrate(): void
+    {
+        $this->authorizeAccess();
+    }
+
+    protected function authorizeAccess(): void
+    {
+        $plugin = FilamentMenuBuilderPlugin::get();
+        $menu = $plugin->getMenuModel()::query()->findOrFail($this->menuId);
+
+        abort_unless($plugin->getMenuResource()::canEdit($menu), 403);
     }
 
     public function form(Schema $schema): Schema
@@ -64,7 +82,9 @@ class MenuItemForm extends Component implements HasSchemas
 
     public function submit(): void
     {
-        $menuItem = array_merge($this->data, [
+        // Use the validated form state rather than the raw `$data` property,
+        // which the client can fill with arbitrary attributes.
+        $menuItem = array_merge($this->form->getState(), [
             'menu_id' => $this->menuId,
         ]);
 
