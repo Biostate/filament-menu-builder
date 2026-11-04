@@ -2,7 +2,7 @@
 
 All notable changes to `filament-menu-builder` will be documented in this file.
 
-## Unreleased
+## v5.2.0 - 2026-11-04
 
 ### Removed
 
@@ -17,6 +17,11 @@ All notable changes to `filament-menu-builder` will be documented in this file.
 * Link URLs using the `javascript:`, `data:` or `vbscript:` scheme are rejected by the form and rendered as `#`, preventing stored XSS in front-end menus and the admin "Go to link" action.
 * `Menuable::scopeFilamentSearch()` binds the translation locale as a query parameter instead of interpolating it into raw SQL.
 * The menuable record select only queries classes registered in the `models` config instead of any class name sent by the client.
+
+### Changed
+
+* Update npm dev dependencies, including esbuild 0.28.1 and shell-quote 1.12.0, to resolve all open Dependabot alerts. The built assets in `resources/dist` are unchanged.
+* Remove the unused `@tailwindcss/typography` dev dependency.
 
 ## v5.1.0 - 2026-05-29
 
