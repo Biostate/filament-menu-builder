@@ -4,6 +4,10 @@ All notable changes to `filament-menu-builder` will be documented in this file.
 
 ## Unreleased
 
+### Removed
+
+* Laravel 11 support. Every Laravel 11 release is affected by unpatched security advisories (including the critical TokenGuard authentication bypass, PKSA-b41t-wbzk-9q51), so Composer refuses to install it by default. The package now requires `illuminate/contracts` `^12.0|^13.0`, and CI no longer tests Laravel 11.
+
 ### Security
 
 * Menu builder actions (edit, delete, duplicate, create sub-item) now only resolve menu items that belong to the menu being edited; previously a crafted `menuItemId` could modify or delete items of any menu.
